@@ -70,7 +70,7 @@ class SensorDataPublisher(Node):
             N/A
 
         Returns:
-            N/A
+            msg: Valid, generaged message with appropriate quality-level data
         """
         self.imu_quality_dict = self.imu_quality_dict.fromkeys(self.imu_quality_dict, "good") # reset quality dict before each msg
         msg = Imu()
@@ -88,7 +88,7 @@ class SensorDataPublisher(Node):
         
         msg.orientation = self.generate_orientation(quality=self.imu_quality_dict['orientation'])
         msg.angular_velocity = self.generate_angular_velocity(quality=self.imu_quality_dict['angular_velocity'])
-        msg.linear_acceleration = self.generate_linear_accleration(quality=self.imu_quality_dict['linear_acceleration'])
+        msg.linear_acceleration = self.generate_linear_acceleration(quality=self.imu_quality_dict['linear_acceleration'])
         self.pub.publish(msg)
         return msg
 
@@ -100,12 +100,12 @@ class SensorDataPublisher(Node):
             N/A
 
         Returns:
-            N/A
+            msg: Valid, generated header
         """
-        msg = Header()
-        msg.stamp = self.get_clock().now().to_msg()
-        msg.frame_id = "imu_link"
-        return msg
+        head = Header()
+        head.stamp = self.get_clock().now().to_msg()
+        head.frame_id = "imu_link"
+        return head
     
     def generate_orientation(self, quality):
         """
@@ -136,7 +136,43 @@ class SensorDataPublisher(Node):
         return quat
 
     def generate_angular_velocity(self, quality):
-        print()
+        """
+        Generates a simulated angular velocity vector.
 
-    def generate_linear_accleration(self, quality):
-        print()
+        Args:
+            quality (str): Data quality level - 'good', 'warn', or 'poor'
+        
+        Returns:
+            Vector3: Valid vector (rad/s) within ranges defined by quality level
+        """
+        x_cord = random.uniform(*IMU_RANGES['angular_velocity'][quality]['x'])
+        y_cord = random.uniform(*IMU_RANGES['angular_velocity'][quality]['y'])
+        z_cord = random.uniform(*IMU_RANGES['angular_velocity'][quality]['z'])
+
+        vector = Vector3()
+        vector.x = x_cord
+        vector.y = y_cord
+        vector.z = z_cord
+
+        return vector
+
+    def generate_linear_acceleration(self, quality):
+        """
+        Generates a simulated linear acceleration vector.
+
+        Args:
+            quality (str): Data quality level - 'good', 'warn', or 'poor'
+        
+        Returns:
+            Vector3: Valid vector (m/s^2) within ranges defined by quality level
+        """
+        x_accel = random.uniform(*IMU_RANGES['linear_acceleration'][quality]['x'])
+        y_accel = random.uniform(*IMU_RANGES['linear_acceleration'][quality]['y'])
+        z_accel = random.uniform(*IMU_RANGES['linear_acceleration'][quality]['z'])
+
+        vector = Vector3()
+        vector.x = x_accel
+        vector.y = y_accel
+        vector.z = z_accel
+
+        return vector
