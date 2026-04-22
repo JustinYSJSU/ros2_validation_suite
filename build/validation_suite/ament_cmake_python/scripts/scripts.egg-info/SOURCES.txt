@@ -1,0 +1,8 @@
+setup.py
+scripts/__init__.py
+scripts/sensor_data_publisher.py
+scripts/sensor_data_validator.py
+scripts.egg-info/PKG-INFO
+scripts.egg-info/SOURCES.txt
+scripts.egg-info/dependency_links.txt
+scripts.egg-info/top_level.txt

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(sensor_validator)
+project(validation_suite)
 
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_python REQUIRED)
@@ -9,7 +9,7 @@ find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(diagnostic_msgs REQUIRED)
 
-ament_python_install_package(${PROJECT_NAME})
+ament_python_install_package(scripts)
 
 install(PROGRAMS
   scripts/sensor_data_publisher.py

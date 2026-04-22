@@ -1,0 +1,4 @@
+source;share/validation_suite/local_setup.bash
+source;share/validation_suite/local_setup.dsv
+source;share/validation_suite/local_setup.sh
+source;share/validation_suite/local_setup.zsh
