@@ -13,6 +13,7 @@ ament_python_install_package(scripts)
 
 install(PROGRAMS
   scripts/sensor_data_publisher.py
+  scripts/sensor_data_validator.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

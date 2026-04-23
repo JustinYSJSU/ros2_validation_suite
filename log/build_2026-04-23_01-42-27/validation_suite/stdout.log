@@ -51,6 +51,7 @@ Compiling '/home/justiny/ros2_validation_suite/install/validation_suite/local/li
 Compiling '/home/justiny/ros2_validation_suite/install/validation_suite/local/lib/python3.10/dist-packages/scripts/sensor_data_publisher.py'...
 Compiling '/home/justiny/ros2_validation_suite/install/validation_suite/local/lib/python3.10/dist-packages/scripts/sensor_data_validator.py'...
 -- Installing: /home/justiny/ros2_validation_suite/install/validation_suite/lib/validation_suite/sensor_data_publisher.py
+-- Installing: /home/justiny/ros2_validation_suite/install/validation_suite/lib/validation_suite/sensor_data_validator.py
 -- Installing: /home/justiny/ros2_validation_suite/install/validation_suite/share/ament_index/resource_index/package_run_dependencies/validation_suite
 -- Installing: /home/justiny/ros2_validation_suite/install/validation_suite/share/ament_index/resource_index/parent_prefix_path/validation_suite
 -- Installing: /home/justiny/ros2_validation_suite/install/validation_suite/share/validation_suite/environment/ament_prefix_path.sh

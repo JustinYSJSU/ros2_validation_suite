@@ -67,7 +67,10 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/validation_suite" TYPE PROGRAM FILES "/home/justiny/ros2_validation_suite/src/validation_suite/scripts/sensor_data_publisher.py")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/validation_suite" TYPE PROGRAM FILES
+    "/home/justiny/ros2_validation_suite/src/validation_suite/scripts/sensor_data_publisher.py"
+    "/home/justiny/ros2_validation_suite/src/validation_suite/scripts/sensor_data_validator.py"
+    )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)

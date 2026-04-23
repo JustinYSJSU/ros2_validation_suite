@@ -8,6 +8,7 @@
 /home/justiny/ros2_validation_suite/install/validation_suite/local/lib/python3.10/dist-packages/scripts/__init__.py
 /home/justiny/ros2_validation_suite/install/validation_suite/local/lib/python3.10/dist-packages/scripts/sensor_data_publisher.py
 /home/justiny/ros2_validation_suite/install/validation_suite/lib/validation_suite/sensor_data_publisher.py
+/home/justiny/ros2_validation_suite/install/validation_suite/lib/validation_suite/sensor_data_validator.py
 /home/justiny/ros2_validation_suite/install/validation_suite/share/ament_index/resource_index/package_run_dependencies/validation_suite
 /home/justiny/ros2_validation_suite/install/validation_suite/share/ament_index/resource_index/parent_prefix_path/validation_suite
 /home/justiny/ros2_validation_suite/install/validation_suite/share/validation_suite/environment/ament_prefix_path.sh

@@ -34,7 +34,7 @@ IMU_RANGES = {
     }
 }
 
-class SensorDataValidatorNode(Node):
+class SensorDataValidator(Node):
     """
     Validates simulated IMU sensor data with probabilistic fault injection.
     
@@ -51,7 +51,8 @@ class SensorDataValidatorNode(Node):
     def __init__(self):
         super().__init__("sensor_data_validator_node")
         self.sub = self.create_subscription(Imu, "imu_data", self.validate_imu_msg, 10)
-        self.pub = self.create_publisher(DiagnosticStatus, "imu_diag", self.generate_imu_diag, 10)
+        self.pub = self.create_publisher(DiagnosticStatus, "imu_diag", 10)
+        
     
     def validate_imu_msg(self, msg):
         header = msg.header
@@ -63,3 +64,17 @@ class SensorDataValidatorNode(Node):
     
     def generate_imu_diag(self):
         print('hi')
+
+def main():
+    rclpy.init() # initialize ros2 communication
+    my_sub = SensorDataValidator()
+    print("Validating")
+
+    try:
+        rclpy.spin(my_sub) # run until interrupt via keyboard
+    except KeyboardInterrupt:
+        print("Terminating node...")
+        my_pub.destroy_node()
+
+if __name__ == '__main__':
+        main()
