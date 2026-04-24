@@ -13,6 +13,7 @@ import rclpy
 import transforms3d
 import math
 from rclpy.node import Node
+from rclpy.time import Time
 from sensor_msgs.msg import Imu
 from diagnostic_msgs.msg import DiagnosticStatus
 
@@ -54,14 +55,34 @@ class SensorDataValidator(Node):
         self.pub = self.create_publisher(DiagnosticStatus, "imu_diag", 10)
         
     def validate_imu_msg(self, msg):
+        diag_msg = DiagnosticStatus()
+
         header = msg.header
         oritentation = msg.orientation
         angular_velocity = msg.angular_velocity
         linear_acceleration = msg.linear_acceleration
 
-        print(f"{header} \n {oritentation} \n {angular_velocity} \n {linear_acceleration}")
-        print(f"{type(header)} \n {type(oritentation)} \n {type(angular_velocity)} \n {type(linear_acceleration)}")
-    
+    def validate_imu_header(self, header):
+        stamp = Time.from_msg(header.stamp)
+        frame_id = header.frame_id
+
+        return stamp != Time() and frame_id == "imu_link"
+
+    def validate_imu_orientation(self, orientation):
+        x = orientation.x
+        y = orientation.y
+        z = orientation.z
+        w = orientation.w
+
+        magnitude = math.sqrt(x**2 + y**2 + z**2 + w**2)
+        if not math.isclose(magnitude, 1.0, abs_tol=1e-6):
+            return False
+        roll_rads, pitch_rads, yaw_rads = transforms3d.euler.quat2euler([w, x, y, z], axes='sxyz')
+
+        roll_deg = math.degrees(roll_rads)
+        pitch_deg = math.degrees(pitch_rads)
+        yaw_deg = math.degrees(yaw_rads)
+        
     def generate_imu_diag(self):
         print('test')
 
