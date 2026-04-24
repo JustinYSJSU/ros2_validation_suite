@@ -53,7 +53,6 @@ class SensorDataValidator(Node):
         self.sub = self.create_subscription(Imu, "imu_data", self.validate_imu_msg, 10)
         self.pub = self.create_publisher(DiagnosticStatus, "imu_diag", 10)
         
-    
     def validate_imu_msg(self, msg):
         header = msg.header
         oritentation = msg.orientation
@@ -61,9 +60,10 @@ class SensorDataValidator(Node):
         linear_acceleration = msg.linear_acceleration
 
         print(f"{header} \n {oritentation} \n {angular_velocity} \n {linear_acceleration}")
+        print(f"{type(header)} \n {type(oritentation)} \n {type(angular_velocity)} \n {type(linear_acceleration)}")
     
     def generate_imu_diag(self):
-        print('hi')
+        print('test')
 
 def main():
     rclpy.init() # initialize ros2 communication
@@ -74,7 +74,7 @@ def main():
         rclpy.spin(my_sub) # run until interrupt via keyboard
     except KeyboardInterrupt:
         print("Terminating node...")
-        my_pub.destroy_node()
+        my_sub.destroy_node()
 
 if __name__ == '__main__':
         main()

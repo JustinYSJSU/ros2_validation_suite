@@ -61,6 +61,7 @@ class SensorDataValidator(Node):
         linear_acceleration = msg.linear_acceleration
 
         print(f"{header} \n {oritentation} \n {angular_velocity} \n {linear_acceleration}")
+        print(f"{type(header)} \n {type(oritentation)} \n {type(angular_velocity)} \n {type(linear_acceleration)}")
     
     def generate_imu_diag(self):
         print('hi')
