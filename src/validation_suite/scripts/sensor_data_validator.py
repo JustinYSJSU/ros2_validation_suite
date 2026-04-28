@@ -74,10 +74,28 @@ class SensorDataValidator(Node):
         angular_velocity_result = self.validate_imu_angular_velocity(angular_velocity=angular_velocity)
         linear_acceleration_result = self.validate_imu_linear_acceleration(linear_acceleration=linear_acceleration)
 
-        # True, GOOD, GOOD, GOOD
-        diag_msg = DiagnosticStatus()
+        if not header_result:
+            diag_msg.level = DiagnosticStatus.ERROR
+            diag_msg.message = "Invalid Header"
+            self.pub.publish(diag_msg)
+            return
+        
+        status_map = {
+            "GOOD": DiagnosticStatus.OK,
+            "WARN": DiagnosticStatus.WARN,
+            "POOR": DiagnosticStatus.ERROR
+        }
 
-        diag_msg
+        severity = {"GOOD": 0, "WARN": 1, "POOR": 2}
+        statuses = [orientation_result, angular_velocity_result, linear_acceleration_result]
+        worst = max(statuses, key=lambda s: severity[s])
+
+        diag_msg.level = status_map[worst]
+        diag_msg.name = "imu_data_valiator"
+        diag_msg.message = f"Status: {status_map[worst]}"
+        diag_msg.hardware_id = "imu_link"
+
+        self.pub.publish(diag_msg)
 
     def validate_imu_header(self, header):
         """
@@ -177,6 +195,7 @@ class SensorDataValidator(Node):
             return "WARN"
         else:
             return "POOR"
+            
 def main():
     rclpy.init()
     my_sub = SensorDataValidator()
