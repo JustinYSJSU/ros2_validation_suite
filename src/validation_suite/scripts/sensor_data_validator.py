@@ -65,13 +65,19 @@ class SensorDataValidator(Node):
         diag_msg = DiagnosticStatus()
 
         header = msg.header
-        oritentation = msg.orientation
+        orientation = msg.orientation
         angular_velocity = msg.angular_velocity
         linear_acceleration = msg.linear_acceleration
 
         header_result = self.validate_imu_header(header=header)
-        oritentation_result = self.validate_imu_orientation(orientation=orientation)
+        orientation_result = self.validate_imu_orientation(orientation=orientation)
         angular_velocity_result = self.validate_imu_angular_velocity(angular_velocity=angular_velocity)
+        linear_acceleration_result = self.validate_imu_linear_acceleration(linear_acceleration=linear_acceleration)
+
+        # True, GOOD, GOOD, GOOD
+        diag_msg = DiagnosticStatus()
+
+        diag_msg
 
     def validate_imu_header(self, header):
         """
@@ -132,7 +138,7 @@ class SensorDataValidator(Node):
         y = linear_acceleration.y
         z = linear_acceleration.z
         return self.get_worst_status(value_tuple=(x,y,z), component="linear_acceleration", keys=("x", "y", "z"))
-        
+
     def get_worst_status(self, value_tuple, component, keys):
         """
         Given 3 values (oritentation x/y/z, angular_velocity x/y/z, linear acclearation x/y/z),
@@ -171,10 +177,6 @@ class SensorDataValidator(Node):
             return "WARN"
         else:
             return "POOR"
-
-    def generate_imu_diag(self):
-        print('test')
-
 def main():
     rclpy.init()
     my_sub = SensorDataValidator()
