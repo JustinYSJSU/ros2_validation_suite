@@ -69,6 +69,10 @@ class SensorDataValidator(Node):
         angular_velocity = msg.angular_velocity
         linear_acceleration = msg.linear_acceleration
 
+        header_result = self.validate_imu_header(header=header)
+        oritentation_result = self.validate_imu_orientation(orientation=orientation)
+        angular_velocity_result = self.validate_imu_angular_velocity(angular_velocity=angular_velocity)
+
     def validate_imu_header(self, header):
         """
         Validates a given IMU header
@@ -86,7 +90,7 @@ class SensorDataValidator(Node):
         Validates a given IMU oritentation
 
         Args:
-            msg: The given IMU orientation
+            orientation: The given IMU orientation
         """
         x = orientation.x
         y = orientation.y
@@ -102,8 +106,33 @@ class SensorDataValidator(Node):
         pitch_deg = math.degrees(pitch_rads)
         yaw_deg = math.degrees(yaw_rads)
 
-        return self.get_worst_status((roll_deg, pitch_deg,yaw_deg), "orientation", ("roll", "pitch", "yaw"))
+        return self.get_worst_status(value_tuple=(roll_deg, pitch_deg,yaw_deg), component="orientation", keys=("roll", "pitch", "yaw"))
 
+    def validate_imu_angular_velocity(self, angular_velocity):
+        """
+        Validates a given IMU angular velocity
+
+        Args:
+            angular_velocity: The given angular velocity
+        """
+        x = angular_velocity.x
+        y = angular_velocity.y
+        z = angular_velocity.z
+        return self.get_worst_status(value_tuple=(x,y,z), component="angular_velocity", keys=("x", "y", "z"))
+
+    def validate_imu_linear_acceleration(self, linear_acceleration):
+        """
+        Validates a given IMU linear acceleration
+
+        Args:
+            linear_acceleration: The given linear acceleration
+        """
+        
+        x = linear_acceleration.x
+        y = linear_acceleration.y
+        z = linear_acceleration.z
+        return self.get_worst_status(value_tuple=(x,y,z), component="linear_acceleration", keys=("x", "y", "z"))
+        
     def get_worst_status(self, value_tuple, component, keys):
         """
         Given 3 values (oritentation x/y/z, angular_velocity x/y/z, linear acclearation x/y/z),
