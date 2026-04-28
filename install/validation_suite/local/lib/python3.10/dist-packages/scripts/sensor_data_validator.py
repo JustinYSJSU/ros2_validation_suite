@@ -13,6 +13,8 @@ import rclpy
 import transforms3d
 import math
 from rclpy.node import Node
+from rclpy.time import Time
+from rclpy.clock import ClockType
 from sensor_msgs.msg import Imu
 from diagnostic_msgs.msg import DiagnosticStatus
 
@@ -53,29 +55,161 @@ class SensorDataValidator(Node):
         self.sub = self.create_subscription(Imu, "imu_data", self.validate_imu_msg, 10)
         self.pub = self.create_publisher(DiagnosticStatus, "imu_diag", 10)
         
-    
     def validate_imu_msg(self, msg):
+        """
+        Validates a given IMU message
+
+        Args:
+            msg: The given IMU message
+        """
+
+        diag_msg = DiagnosticStatus()
+
         header = msg.header
-        oritentation = msg.orientation
+        orientation = msg.orientation
         angular_velocity = msg.angular_velocity
         linear_acceleration = msg.linear_acceleration
 
-        print(f"{header} \n {oritentation} \n {angular_velocity} \n {linear_acceleration}")
-        print(f"{type(header)} \n {type(oritentation)} \n {type(angular_velocity)} \n {type(linear_acceleration)}")
-    
-    def generate_imu_diag(self):
-        print('hi')
+        header_result = self.validate_imu_header(header=header)
+        orientation_result = self.validate_imu_orientation(orientation=orientation)
+        angular_velocity_result = self.validate_imu_angular_velocity(angular_velocity=angular_velocity)
+        linear_acceleration_result = self.validate_imu_linear_acceleration(linear_acceleration=linear_acceleration)
+
+        if not header_result:
+            diag_msg.level = DiagnosticStatus.ERROR
+            diag_msg.message = "Invalid Header"
+            self.pub.publish(diag_msg)
+            return
+        
+        status_map = {
+            "GOOD": DiagnosticStatus.OK,
+            "WARN": DiagnosticStatus.WARN,
+            "POOR": DiagnosticStatus.ERROR
+        }
+
+        severity = {"GOOD": 0, "WARN": 1, "POOR": 2}
+        statuses = [orientation_result, angular_velocity_result, linear_acceleration_result]
+        worst = max(statuses, key=lambda s: severity[s])
+
+        diag_msg.level = status_map[worst]
+        diag_msg.name = "imu_data_valiator"
+        diag_msg.message = f"Status: {worst}"
+        diag_msg.hardware_id = "imu_link"
+
+        diag_msg.values.append(
+            f"HEADER: {header_result} \n ORIENTATION: {orientation_result} \n ANGULAR VELOCITY: {angular_velocity_result} \n LINEAR ACCELERATION: {linear_acceleration_result}"
+        )
+        self.pub.publish(diag_msg)
+
+    def validate_imu_header(self, header):
+        """
+        Validates a given IMU header
+
+        Args:
+            msg: The given IMU header
+        """
+        stamp = Time.from_msg(header.stamp)
+        frame_id = header.frame_id
+
+        return stamp != Time(clock_type=ClockType.ROS_TIME) and frame_id == "imu_link"
+
+    def validate_imu_orientation(self, orientation):
+        """
+        Validates a given IMU oritentation
+
+        Args:
+            orientation: The given IMU orientation
+        """
+        x = orientation.x
+        y = orientation.y
+        z = orientation.z
+        w = orientation.w
+
+        magnitude = math.sqrt(x**2 + y**2 + z**2 + w**2)
+        if not math.isclose(magnitude, 1.0, abs_tol=1e-6):
+            return "POOR"
+        roll_rads, pitch_rads, yaw_rads = transforms3d.euler.quat2euler([w, x, y, z], axes='sxyz')
+
+        roll_deg = math.degrees(roll_rads)
+        pitch_deg = math.degrees(pitch_rads)
+        yaw_deg = math.degrees(yaw_rads)
+
+        return self.get_worst_status(value_tuple=(roll_deg, pitch_deg,yaw_deg), component="orientation", keys=("roll", "pitch", "yaw"))
+
+    def validate_imu_angular_velocity(self, angular_velocity):
+        """
+        Validates a given IMU angular velocity
+
+        Args:
+            angular_velocity: The given angular velocity
+        """
+        x = angular_velocity.x
+        y = angular_velocity.y
+        z = angular_velocity.z
+        return self.get_worst_status(value_tuple=(x,y,z), component="angular_velocity", keys=("x", "y", "z"))
+
+    def validate_imu_linear_acceleration(self, linear_acceleration):
+        """
+        Validates a given IMU linear acceleration
+
+        Args:
+            linear_acceleration: The given linear acceleration
+        """
+        
+        x = linear_acceleration.x
+        y = linear_acceleration.y
+        z = linear_acceleration.z
+        return self.get_worst_status(value_tuple=(x,y,z), component="linear_acceleration", keys=("x", "y", "z"))
+
+    def get_worst_status(self, value_tuple, component, keys):
+        """
+        Given 3 values (oritentation x/y/z, angular_velocity x/y/z, linear acclearation x/y/z),
+        classify each value and return the most severe status message
+
+        Args:
+            value_tuple: A tuple containing all 3 values for a component (x/y/z)
+            component: The component that x/y/z are associated with (orientation, angular_velocity, linear acceleration)
+            keys: The tuple layout names of the corresponding component ("roll", "pitch", "yaw") / ("x", "y", "z")
+        """
+        severity = {"GOOD": 0, "WARN": 1, "POOR": 2}
+        worst = "GOOD"
+
+        # example zip() => [("roll": xxx), ("pitch": xxx), ("yaw": xxx)]
+        for key, value in zip((keys), value_tuple):
+            res = self.classify_value(value, component, key)   
+            if severity[res] > severity[worst]:
+                worst = res
+        return worst
+
+    def classify_value(self, value, component, key):
+        """
+        Given a value from a component, determine it's status (good/warn/poor)
+
+        Args:
+            value: The given value from the component
+            component: The given component of the IMU
+            key: The specific field name to look up in IMU_RANGES (e.g. "roll", "x"
+        """
+        good_min, good_max = IMU_RANGES[component]["good"][key]
+        warn_min, warn_max = IMU_RANGES[component]["warn"][key]
+
+        if good_min <= value <= good_max:
+            return "GOOD"
+        elif warn_min <= value <= warn_max:
+            return "WARN"
+        else:
+            return "POOR"
 
 def main():
-    rclpy.init() # initialize ros2 communication
+    rclpy.init()
     my_sub = SensorDataValidator()
     print("Validating")
 
     try:
-        rclpy.spin(my_sub) # run until interrupt via keyboard
+        rclpy.spin(my_sub) 
     except KeyboardInterrupt:
         print("Terminating node...")
-        my_pub.destroy_node()
+        my_sub.destroy_node()
 
 if __name__ == '__main__':
         main()

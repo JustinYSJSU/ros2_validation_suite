@@ -14,6 +14,7 @@ import transforms3d
 import math
 from rclpy.node import Node
 from rclpy.time import Time
+from rclpy.clock import ClockType
 from sensor_msgs.msg import Imu
 from diagnostic_msgs.msg import DiagnosticStatus
 
@@ -92,7 +93,7 @@ class SensorDataValidator(Node):
 
         diag_msg.level = status_map[worst]
         diag_msg.name = "imu_data_valiator"
-        diag_msg.message = f"Status: {status_map[worst]}"
+        diag_msg.message = f"Status: {worst}"
         diag_msg.hardware_id = "imu_link"
 
         self.pub.publish(diag_msg)
@@ -107,7 +108,7 @@ class SensorDataValidator(Node):
         stamp = Time.from_msg(header.stamp)
         frame_id = header.frame_id
 
-        return stamp != Time() and frame_id == "imu_link"
+        return stamp != Time(clock_type=ClockType.ROS_TIME) and frame_id == "imu_link"
 
     def validate_imu_orientation(self, orientation):
         """
@@ -195,7 +196,7 @@ class SensorDataValidator(Node):
             return "WARN"
         else:
             return "POOR"
-            
+
 def main():
     rclpy.init()
     my_sub = SensorDataValidator()
