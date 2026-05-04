@@ -1,6 +1,7 @@
 import sys
 import os
 import pytest
+from config import IMU_RANGES
 from rclpy.node import Node
 from sensor_data_publisher import SensorDataPublisher
 from sensor_data_validator import SensorDataValidator
