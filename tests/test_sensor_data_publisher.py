@@ -19,7 +19,7 @@ class TestSensorDataPublishser:
         assert imu_header_data.frame_id == "imu_link"
     
     @pytest.mark.parametrize("quality_level", ["good", "warn", "poor"])
-    def test_orientation(sensor_data_publisher, quality_level):
+    def test_generate_orientation(sensor_data_publisher, quality_level):
         '''
         Test function for generate_imu_header
 
