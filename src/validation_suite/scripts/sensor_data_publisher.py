@@ -12,29 +12,12 @@ import random
 import rclpy
 import transforms3d
 import math
+from . import config
 from rclpy.node import Node
 from sensor_msgs.msg import Imu
 from std_msgs.msg import Header
 from geometry_msgs.msg import Quaternion # orientation
 from geometry_msgs.msg import Vector3 # angular_velocity + linear acceleration
-
-IMU_RANGES = {
-    "orientation": {
-        "good":  {"roll": (-15, 15),  "pitch": (-20, 20),  "yaw": (-180, 180)},
-        "warn":  {"roll": (-30, 30),  "pitch": (-35, 35),  "yaw": (-180, 180)},
-        "poor":  {"roll": (-90, 90),  "pitch": (-90, 90),  "yaw": (-180, 180)}
-    },
-    "angular_velocity": {
-        "good":  {"x": (-2, 2),   "y": (-2, 2),   "z": (-2, 2)},
-        "warn":  {"x": (-5, 5),   "y": (-5, 5),   "z": (-5, 5)},
-        "poor":  {"x": (-15, 15), "y": (-15, 15), "z": (-15, 15)}
-    },
-    "linear_acceleration": {
-        "good":  {"x": (-15, 15), "y": (-15, 15), "z": (5, 15)},
-        "warn":  {"x": (-20, 20), "y": (-20, 20), "z": (2, 20)},
-        "poor":  {"x": (-50, 50), "y": (-50, 50), "z": (-50, 50)}
-    }
-}
 
 class SensorDataPublisher(Node):
     """
@@ -118,9 +101,9 @@ class SensorDataPublisher(Node):
         Returns:
             Quaternion: Valid unit quaternion within ranges defined by quality level
         """
-        roll_deg = random.uniform(*IMU_RANGES['orientation'][quality]['roll'])
-        pitch_deg = random.uniform(*IMU_RANGES['orientation'][quality]['pitch'])
-        yaw_deg   = random.uniform(*IMU_RANGES['orientation'][quality]['yaw'])
+        roll_deg = random.uniform(*config.IMU_RANGES['orientation'][quality]['roll'])
+        pitch_deg = random.uniform(*config.IMU_RANGES['orientation'][quality]['pitch'])
+        yaw_deg   = random.uniform(*config.IMU_RANGES['orientation'][quality]['yaw'])
 
         roll_rads = math.radians(roll_deg)
         pitch_rads = math.radians(pitch_deg)
@@ -146,9 +129,9 @@ class SensorDataPublisher(Node):
         Returns:
             Vector3: Valid vector (rad/s) within ranges defined by quality level
         """
-        x_cord = random.uniform(*IMU_RANGES['angular_velocity'][quality]['x'])
-        y_cord = random.uniform(*IMU_RANGES['angular_velocity'][quality]['y'])
-        z_cord = random.uniform(*IMU_RANGES['angular_velocity'][quality]['z'])
+        x_cord = random.uniform(*config.IMU_RANGES['angular_velocity'][quality]['x'])
+        y_cord = random.uniform(*config.IMU_RANGES['angular_velocity'][quality]['y'])
+        z_cord = random.uniform(*config.IMU_RANGES['angular_velocity'][quality]['z'])
 
         vector = Vector3()
         vector.x = x_cord
@@ -167,9 +150,9 @@ class SensorDataPublisher(Node):
         Returns:
             Vector3: Valid vector (m/s^2) within ranges defined by quality level
         """
-        x_accel = random.uniform(*IMU_RANGES['linear_acceleration'][quality]['x'])
-        y_accel = random.uniform(*IMU_RANGES['linear_acceleration'][quality]['y'])
-        z_accel = random.uniform(*IMU_RANGES['linear_acceleration'][quality]['z'])
+        x_accel = random.uniform(*config.IMU_RANGES['linear_acceleration'][quality]['x'])
+        y_accel = random.uniform(*config.IMU_RANGES['linear_acceleration'][quality]['y'])
+        z_accel = random.uniform(*config.IMU_RANGES['linear_acceleration'][quality]['z'])
 
         vector = Vector3()
         vector.x = x_accel

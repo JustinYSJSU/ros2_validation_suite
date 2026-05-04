@@ -12,29 +12,12 @@ import random
 import rclpy
 import transforms3d
 import math
+from . import config
 from rclpy.node import Node
 from rclpy.time import Time
 from rclpy.clock import ClockType
 from sensor_msgs.msg import Imu
 from diagnostic_msgs.msg import DiagnosticStatus
-
-IMU_RANGES = {
-    "orientation": {
-        "good":  {"roll": (-15, 15),  "pitch": (-20, 20),  "yaw": (-180, 180)},
-        "warn":  {"roll": (-30, 30),  "pitch": (-35, 35),  "yaw": (-180, 180)},
-        "poor":  {"roll": (-90, 90),  "pitch": (-90, 90),  "yaw": (-180, 180)}
-    },
-    "angular_velocity": {
-        "good":  {"x": (-2, 2),   "y": (-2, 2),   "z": (-2, 2)},
-        "warn":  {"x": (-5, 5),   "y": (-5, 5),   "z": (-5, 5)},
-        "poor":  {"x": (-15, 15), "y": (-15, 15), "z": (-15, 15)}
-    },
-    "linear_acceleration": {
-        "good":  {"x": (-15, 15), "y": (-15, 15), "z": (5, 15)},
-        "warn":  {"x": (-20, 20), "y": (-20, 20), "z": (2, 20)},
-        "poor":  {"x": (-50, 50), "y": (-50, 50), "z": (-50, 50)}
-    }
-}
 
 class SensorDataValidator(Node):
     """
@@ -187,8 +170,8 @@ class SensorDataValidator(Node):
             component: The given component of the IMU
             key: The specific field name to look up in IMU_RANGES (e.g. "roll", "x"
         """
-        good_min, good_max = IMU_RANGES[component]["good"][key]
-        warn_min, warn_max = IMU_RANGES[component]["warn"][key]
+        good_min, good_max = config.IMU_RANGES[component]["good"][key]
+        warn_min, warn_max = config.IMU_RANGES[component]["warn"][key]
 
         if good_min <= value <= good_max:
             return "GOOD"
