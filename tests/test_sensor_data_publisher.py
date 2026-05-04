@@ -21,7 +21,7 @@ class TestSensorDataPublishser:
     @pytest.mark.parametrize("quality_level", ["good", "warn", "poor"])
     def test_generate_orientation(sensor_data_publisher, quality_level):
         '''
-        Test function for generate_imu_header
+        Test function for generate_orientation
 
         Fixture(s):
             - sensor_data_pulisher: Continues using same SensorDataPublisher with module scope
@@ -41,3 +41,20 @@ class TestSensorDataPublishser:
         assert IMU_RANGES['orientation'][quality_level]['roll'][0] <= roll_deg <= IMU_RANGES['orientation'][quality_level]['roll'][1]
         assert IMU_RANGES['orientation'][quality_level]['pitch'][0] <= pitch_deg <= IMU_RANGES['orientation'][quality_level]['pitch'][1]
         assert IMU_RANGES['orientation'][quality_level]['yaw'][0] <= roll_deg <= IMU_RANGES['orientation'][quality_level]['yaw'][1]
+    
+    @pytest.mark.parametrize("quality_level", ["good", "warn", "poor"])
+    def test_generate_angular_velocity(sensor_data_publisher, quality_level):
+        '''
+        Test function for generate_angular_velocity
+
+        Fixture(s):
+            - sensor_data_pulisher: Continues using same SensorDataPublisher with module scope
+        '''
+        angular_velocity_data = sensor_data_publisher.generate_angular_velocity(quality_level)
+        x_cord = angular_velocity_data.x
+        y_cord = angular_velocity_data.y
+        z_cord = angular_velocity_data.z
+
+        assert IMU_RANGES['angular_velocity'][quality_level]['x'][0] <= x_cord <= IMU_RANGES['angular_velocity'][quality_level]['x'][1]
+        assert IMU_RANGES['angular_velocity'][quality_level]['y'][0] <= y_cord <= IMU_RANGES['angular_velocity'][quality_level]['y'][1]
+        assert IMU_RANGES['angular_velocity'][quality_level]['z'][0] <= z_cord <= IMU_RANGES['angular_velocity'][quality_level]['z'][1]
