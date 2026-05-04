@@ -37,3 +37,7 @@ class TestSensorDataPublishser:
         roll_deg = math.degrees(roll_rads)
         pitch_deg = math.degrees(pitch_rads)
         yaw_deg = math.degrees(yaw_rads)
+
+        assert IMU_RANGES['orientation'][quality_level]['roll'][0] <= roll_deg <= IMU_RANGES['orientation'][quality_level]['roll'][1]
+        assert IMU_RANGES['orientation'][quality_level]['pitch'][0] <= pitch_deg <= IMU_RANGES['orientation'][quality_level]['pitch'][1]
+        assert IMU_RANGES['orientation'][quality_level]['yaw'][0] <= roll_deg <= IMU_RANGES['orientation'][quality_level]['yaw'][1]
