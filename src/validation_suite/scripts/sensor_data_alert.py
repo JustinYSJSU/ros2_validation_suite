@@ -34,7 +34,7 @@ class SensorDataAlert(Node):
         """
 
         level = msg.level
-
+ 
         ros_now = self.get_clock().now().to_msg()  # gives a builtin_interfaces/Time msg
         seconds = ros_now.sec
         nanoseconds = ros_now.nanosec
