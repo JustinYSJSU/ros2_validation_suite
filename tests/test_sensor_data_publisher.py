@@ -24,7 +24,7 @@ class TestSensorDataPublishser:
         Test function for generate_orientation
 
         Fixture(s):
-            - sensor_data_pulisher: Continues using same SensorDataPublisher with module scope
+            - sensor_data_publisher: Continues using same SensorDataPublisher with module scope
         '''
         angular_velocity_data = sensor_data_publisher.generate_orientation(quality_level)
         w = angular_velocity_data.w
@@ -48,7 +48,7 @@ class TestSensorDataPublishser:
         Test function for generate_angular_velocity
 
         Fixture(s):
-            - sensor_data_pulisher: Continues using same SensorDataPublisher with module scope
+            - sensor_data_publisher: Continues using same SensorDataPublisher with module scope
         '''
         angular_velocity_data = sensor_data_publisher.generate_angular_velocity(quality_level)
         x_cord = angular_velocity_data.x
@@ -58,3 +58,20 @@ class TestSensorDataPublishser:
         assert IMU_RANGES['angular_velocity'][quality_level]['x'][0] <= x_cord <= IMU_RANGES['angular_velocity'][quality_level]['x'][1]
         assert IMU_RANGES['angular_velocity'][quality_level]['y'][0] <= y_cord <= IMU_RANGES['angular_velocity'][quality_level]['y'][1]
         assert IMU_RANGES['angular_velocity'][quality_level]['z'][0] <= z_cord <= IMU_RANGES['angular_velocity'][quality_level]['z'][1]
+    
+    @pytest.mark.parametrize("quality_level", ["good", "warn", "poor"])
+    def test_generate_linear_acceleration(sensor_data_publisher, quality_level):
+        '''
+        Test function for generate_linear_acceleration
+
+        Fixture(s):
+            - sensor_data_publisher: Continues using same SensorDataPublisher with module scope
+        '''
+        linear_acceleration_data = sensor_data_publisher.generate_linear_acceleration(quality_level)
+        x_accel = linear_acceleration_data.x
+        y_accel = linear_acceleration_data.y
+        z_accel = linear_acceleration_data.z
+
+        assert IMU_RANGES['linear_acceleration'][quality_level]['x'][0] <= x_accel <= IMU_RANGES['linear_acceleration'][quality_level]['x'][1]
+        assert IMU_RANGES['linear_acceleration'][quality_level]['y'][0] <= y_accel <= IMU_RANGES['linear_acceleration'][quality_level]['y'][1]
+        assert IMU_RANGES['linear_acceleration'][quality_level]['z'][0] <= z_accel <= IMU_RANGES['linear_acceleration'][quality_level]['z'][1]
