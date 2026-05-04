@@ -1,13 +1,15 @@
 import sys
 import os
 import pytest
+import rclpy
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '../src/validation_suite/scripts'))
+
 from config import IMU_RANGES
 from rclpy.node import Node
 from sensor_data_publisher import SensorDataPublisher
 from sensor_data_validator import SensorDataValidator
 from sensor_data_alert import SensorDataAlert
-
-sys.path.append(os.path.join(os.path.dirname(__file__), '../src/validation_suite/scripts'))
 
 @pytest.fixture(scope="session")
 def ros2_init():

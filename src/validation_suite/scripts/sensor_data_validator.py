@@ -12,7 +12,7 @@ import random
 import rclpy
 import transforms3d
 import math
-from . import config
+import config
 from rclpy.node import Node
 from rclpy.time import Time
 from rclpy.clock import ClockType

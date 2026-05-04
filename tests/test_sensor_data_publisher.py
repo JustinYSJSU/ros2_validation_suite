@@ -3,10 +3,11 @@ import math
 import transforms3d
 from config import IMU_RANGES
 from rclpy.time import Time
+from rclpy.clock import ClockType
 
-class TestSensorDataPublishser:
+class TestSensorDataPublisher:
 
-    def test_generate_imu_header(sensor_data_publisher):
+    def test_generate_imu_header(self, sensor_data_publisher):
         '''
         Test function for generate_imu_header
 
@@ -15,11 +16,11 @@ class TestSensorDataPublishser:
         '''
         imu_header_data = sensor_data_publisher.generate_imu_header()
         
-        assert Time.from_msg(imu_header_data.stamp) != Time()
+        assert Time.from_msg(imu_header_data.stamp, clock_type=ClockType.SYSTEM_TIME) != Time()
         assert imu_header_data.frame_id == "imu_link"
     
     @pytest.mark.parametrize("quality_level", ["good", "warn", "poor"])
-    def test_generate_orientation(sensor_data_publisher, quality_level):
+    def test_generate_orientation(self, sensor_data_publisher, quality_level):
         '''
         Test function for generate_orientation
 
@@ -40,10 +41,10 @@ class TestSensorDataPublishser:
 
         assert IMU_RANGES['orientation'][quality_level]['roll'][0] <= roll_deg <= IMU_RANGES['orientation'][quality_level]['roll'][1]
         assert IMU_RANGES['orientation'][quality_level]['pitch'][0] <= pitch_deg <= IMU_RANGES['orientation'][quality_level]['pitch'][1]
-        assert IMU_RANGES['orientation'][quality_level]['yaw'][0] <= roll_deg <= IMU_RANGES['orientation'][quality_level]['yaw'][1]
+        assert IMU_RANGES['orientation'][quality_level]['yaw'][0] <= yaw_deg <= IMU_RANGES['orientation'][quality_level]['yaw'][1]
     
     @pytest.mark.parametrize("quality_level", ["good", "warn", "poor"])
-    def test_generate_angular_velocity(sensor_data_publisher, quality_level):
+    def test_generate_angular_velocity(self, sensor_data_publisher, quality_level):
         '''
         Test function for generate_angular_velocity
 
@@ -60,7 +61,7 @@ class TestSensorDataPublishser:
         assert IMU_RANGES['angular_velocity'][quality_level]['z'][0] <= z_cord <= IMU_RANGES['angular_velocity'][quality_level]['z'][1]
     
     @pytest.mark.parametrize("quality_level", ["good", "warn", "poor"])
-    def test_generate_linear_acceleration(sensor_data_publisher, quality_level):
+    def test_generate_linear_acceleration(self, sensor_data_publisher, quality_level):
         '''
         Test function for generate_linear_acceleration
 
