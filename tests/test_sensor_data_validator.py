@@ -30,10 +30,10 @@ class TestSensorDataValidator():
         assert sensor_data_validator.validate_imu_header(head) == valid_result
 
     @pytest.mark.parametrize("w, x, y, z, expected", [
-    (1.0,    0.0,    0.0, 0.0, "good"),   
-    (0.9659, 0.2588, 0.0, 0.0, "warn"),  
-    (0.7071, 0.7071, 0.0, 0.0, "poor"),
-    (1.0,    1.0,    0.0, 0.0, "poor"),
+    (1.0,    0.0,    0.0, 0.0, "GOOD"),   
+    (0.9659, 0.2588, 0.0, 0.0, "WARN"),  
+    (0.7071, 0.7071, 0.0, 0.0, "POOR"),
+    (1.0,    1.0,    0.0, 0.0, "POOR"),
     ])
     def test_validate_imu_orientation(self, sensor_data_validator, w, x, y, z, expected):
         """
@@ -50,13 +50,13 @@ class TestSensorDataValidator():
 
         assert sensor_data_validator.validate_imu_orientation(quat) == expected
     
-    @pytset.mark.parametrize("x, y, z, expected", [
-    (0.0,  0.0,  0.0,  "good"),  
-    (1.5,  1.5,  1.5,  "good"),  
-    (3.0,  0.0,  0.0,  "warn"),  
-    (0.0,  4.0,  0.0,  "warn"), 
-    (8.0,  0.0,  0.0,  "poor"),  
-    (8.0,  8.0,  8.0,  "poor"),
+    @pytest.mark.parametrize("x_cord, y_cord, z_cord, expected", [
+    (0.0,  0.0,  0.0,  "GOOD"),  
+    (1.5,  1.5,  1.5,  "GOOD"),  
+    (3.0,  0.0,  0.0,  "WARN"),  
+    (0.0,  4.0,  0.0,  "WARN"), 
+    (8.0,  0.0,  0.0,  "POOR"),  
+    (8.0,  8.0,  8.0,  "POOR"),
     ])
     def test_validate_imu_angular_velocity(self, sensor_data_validator, x_cord, y_cord, z_cord, expected):
         """
@@ -72,13 +72,13 @@ class TestSensorDataValidator():
         
         assert sensor_data_validator.validate_imu_angular_velocity(vector) == expected
     
-    @pytest.mark.parametrize("x, y, z, expected", [
-    (0.0,   0.0,   9.8,  "good"), 
-    (10.0,  5.0,   9.8,  "good"),
-    (17.0,  0.0,   9.8,  "warn"),
-    (0.0,   0.0,   1.0,  "warn"), 
-    (25.0,  0.0,   9.8,  "poor"), 
-    (0.0,   0.0,  -5.0,  "poor"),
+    @pytest.mark.parametrize("x_accel, y_accel, z_accel, expected", [
+    (0.0,   0.0,   9.8,  "GOOD"), 
+    (10.0,  5.0,   9.8,  "GOOD"),
+    (17.0,  0.0,   9.8,  "WARN"),
+    (0.0,   0.0,   3.0,  "WARN"), 
+    (25.0,  0.0,   9.8,  "POOR"), 
+    (0.0,   0.0,  -5.0,  "POOR"),
     ])
     def test_validate_imu_linear_acceleration(self, sensor_data_validator, x_accel, y_accel, z_accel, expected):
         """

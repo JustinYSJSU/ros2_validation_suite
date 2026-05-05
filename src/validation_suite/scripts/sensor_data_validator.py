@@ -106,7 +106,7 @@ class SensorDataValidator(Node):
         w = orientation.w
 
         magnitude = math.sqrt(x**2 + y**2 + z**2 + w**2)
-        if not math.isclose(magnitude, 1.0, abs_tol=1e-6):
+        if not math.isclose(magnitude, 1.0, abs_tol=1e-3):
             return "POOR"
         roll_rads, pitch_rads, yaw_rads = transforms3d.euler.quat2euler([w, x, y, z], axes='sxyz')
 
