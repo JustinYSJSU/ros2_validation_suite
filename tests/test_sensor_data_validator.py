@@ -58,7 +58,7 @@ class TestSensorDataValidator():
     (8.0,  0.0,  0.0,  "poor"),  
     (8.0,  8.0,  8.0,  "poor"),
     ])
-    def test_validate_imu_angular_velocity(self, sensor_data_validator, x, y, z, expected):
+    def test_validate_imu_angular_velocity(self, sensor_data_validator, x_cord, y_cord, z_cord, expected):
         """
         Test function validate_imu_angular_velocity
 
@@ -66,8 +66,30 @@ class TestSensorDataValidator():
             - sensor_data_validator: Using sensor_data_validator fixture with module scope
         """
         vector = Vector3()
-        vector.x = x
-        vector.y = y
-        vector.z = z
+        vector.x = x_cord
+        vector.y = y_cord
+        vector.z = z_cord
         
         assert sensor_data_validator.validate_imu_angular_velocity(vector) == expected
+    
+    @pytest.mark.parametrize("x, y, z, expected", [
+    (0.0,   0.0,   9.8,  "good"), 
+    (10.0,  5.0,   9.8,  "good"),
+    (17.0,  0.0,   9.8,  "warn"),
+    (0.0,   0.0,   1.0,  "warn"), 
+    (25.0,  0.0,   9.8,  "poor"), 
+    (0.0,   0.0,  -5.0,  "poor"),
+    ])
+    def test_validate_imu_linear_acceleration(self, sensor_data_validator, x_accel, y_accel, z_accel, expected):
+        """
+        Test function validate_imu_linear_acceleration
+
+        Fixture(s):
+            - sensor_data_validator: Using sensor_data_validator fixture with module scope
+        """
+        vector = Vector3()
+        vector.x = x_accel
+        vector.y = y_accel
+        vector.z = z_accel
+        
+        assert sensor_data_validator.validate_imu_linear_acceleration(vector) == expected
