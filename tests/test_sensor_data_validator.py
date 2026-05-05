@@ -49,3 +49,25 @@ class TestSensorDataValidator():
         quat.z = z
 
         assert sensor_data_validator.validate_imu_orientation(quat) == expected
+    
+    @pytset.mark.parametrize("x, y, z, expected", [
+    (0.0,  0.0,  0.0,  "good"),  
+    (1.5,  1.5,  1.5,  "good"),  
+    (3.0,  0.0,  0.0,  "warn"),  
+    (0.0,  4.0,  0.0,  "warn"), 
+    (8.0,  0.0,  0.0,  "poor"),  
+    (8.0,  8.0,  8.0,  "poor"),
+    ])
+    def test_validate_imu_angular_velocity(self, sensor_data_validator, x, y, z, expected):
+        """
+        Test function validate_imu_angular_velocity
+
+        Fixture(s):
+            - sensor_data_validator: Using sensor_data_validator fixture with module scope
+        """
+        vector = Vector3()
+        vector.x = x
+        vector.y = y
+        vector.z = z
+        
+        assert sensor_data_validator.validate_imu_angular_velocity(vector) == expected
