@@ -1,0 +1,41 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: ROS2 Validation CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    container:
+      image: ros:humble
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install dependencies
+      run: |
+        apt-get update && apt-get install -y python3-pip
+        pip3 install --upgrade pip
+        if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
+    - name: Build ros2 package
+      run: |
+        . /opt/ros/humble/setup.sh
+        colcon build
+    - name: Lint with flake8
+      run: |
+        python3 -m flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        python3 -m flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Run tests
+      run: |
+        . /opt/ros/humble/setup.sh
+        . install/setup.sh
+        cd tests && python3 -m pytest -v
