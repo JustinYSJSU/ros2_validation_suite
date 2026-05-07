@@ -1,3 +1,0 @@
-source;share/validation_suite/environment/ament_prefix_path.sh
-source;share/validation_suite/environment/path.sh
-source;share/validation_suite/environment/pythonpath.sh
