@@ -20,10 +20,6 @@ jobs:
       image: ros:humble
 
     steps:
-    - name: Pull ros2 humble from docker
-      run: |
-        docker pull ros:humble
-        steps:
     - uses: actions/checkout@v4
     - name: Install dependencies
       run: |
