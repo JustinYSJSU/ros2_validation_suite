@@ -10,3 +10,10 @@ sensor_data_publisher.py => publish topic/imu_data
 sensor_data_publisher.py => subscribe to topic /imu_data, publish topic /imu_diag
 sensor_data_alert.py => subscribe to topic /imu_diag
 ```
+
+## Folder / File Structure
+```
+root/
+|---src/validation_suite/ # ROS 2 package directory
+|       |---scripts/ # directory containing publisher, validator, and alert nodes
+|---tests/ # directory containing automated test suite
