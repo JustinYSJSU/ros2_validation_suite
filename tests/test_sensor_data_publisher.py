@@ -8,8 +8,7 @@ from rclpy.clock import ClockType
 class TestSensorDataPublisher:
 
     def test_generate_imu_header(self, sensor_data_publisher):
-        '''
-        Test function for generate_imu_header
+        '''Test function for generate_imu_header
 
         Fixture(s):
             - sensor_data_publisher: Initialize SensorDataPublisher with module scope
@@ -21,8 +20,7 @@ class TestSensorDataPublisher:
     
     @pytest.mark.parametrize("quality_level", ["good", "warn", "poor"])
     def test_generate_orientation(self, sensor_data_publisher, quality_level):
-        '''
-        Test function for generate_orientation
+        '''Test function for generate_orientation
 
         Fixture(s):
             - sensor_data_publisher: Continues using same SensorDataPublisher with module scope
@@ -45,8 +43,7 @@ class TestSensorDataPublisher:
     
     @pytest.mark.parametrize("quality_level", ["good", "warn", "poor"])
     def test_generate_angular_velocity(self, sensor_data_publisher, quality_level):
-        '''
-        Test function for generate_angular_velocity
+        '''Test function for generate_angular_velocity
 
         Fixture(s):
             - sensor_data_publisher: Continues using same SensorDataPublisher with module scope
@@ -62,8 +59,7 @@ class TestSensorDataPublisher:
     
     @pytest.mark.parametrize("quality_level", ["good", "warn", "poor"])
     def test_generate_linear_acceleration(self, sensor_data_publisher, quality_level):
-        '''
-        Test function for generate_linear_acceleration
+        '''Test function for generate_linear_acceleration
 
         Fixture(s):
             - sensor_data_publisher: Continues using same SensorDataPublisher with module scope

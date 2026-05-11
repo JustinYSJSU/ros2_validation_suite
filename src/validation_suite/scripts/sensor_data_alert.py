@@ -1,6 +1,5 @@
 #!/usr/bin/python3
-"""
-sensor_data_alert.py
+"""sensor_data_alert.py
 
 ROS2 sensor alert node for the IMU Sensor Validation Framework.
 Subscribes to the "/imu_diag" topic from sensor_data_validator.py and raises alerts for WARN or ERROR states
@@ -12,8 +11,7 @@ from diagnostic_msgs.msg import DiagnosticStatus
 from std_msgs.msg import String
 
 class SensorDataAlert(Node):
-    """
-    Subscribes to the "/imu_diag" topic from sensor_data_validator.py and raises alerts for WARN or ERROR states
+    """Subscribes to the "/imu_diag" topic from sensor_data_validator.py and raises alerts for WARN or ERROR states
 
     Topics:
         Subscribed: "/imu_diag"
@@ -24,9 +22,7 @@ class SensorDataAlert(Node):
         self.sub = self.create_subscription(DiagnosticStatus, "imu_diag", self.log_alert, 10)
     
     def log_alert(self, msg):
-        """
-        Callback function for imu_diag topic subscription
-
+        """Callback function for imu_diag topic subscription
         In the case of a WARN or ERROR state, log an alert for the syste,
 
         Args:

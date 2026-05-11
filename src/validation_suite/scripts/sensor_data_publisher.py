@@ -20,9 +20,7 @@ from geometry_msgs.msg import Quaternion # orientation
 from geometry_msgs.msg import Vector3 # angular_velocity + linear acceleration
 
 class SensorDataPublisher(Node):
-    """
-    Publishes simulated IMU sensor data with probabilistic fault injection.
-    
+    """Publishes simulated IMU sensor data with probabilistic fault injection.
     Publishes good data 85% of the time, degraded (warn) 10%, 
     and failed (poor) 5%. Fault injection targets a single randomly 
     selected component per message.
@@ -46,8 +44,7 @@ class SensorDataPublisher(Node):
         }
 
     def generate_imu_data(self):
-        """
-        Calculates the quality level (good/warn/poor), then
+        """Calculates the quality level (good/warn/poor), then
         generates the appropriate IMU data
 
         Args:
@@ -77,8 +74,7 @@ class SensorDataPublisher(Node):
         return msg
 
     def generate_imu_header(self):
-        """
-        Generates header for IMU message
+        """Generates header for IMU message
 
         Args:
             N/A
@@ -92,8 +88,7 @@ class SensorDataPublisher(Node):
         return head
     
     def generate_orientation(self, quality):
-        """
-        Generates a simulated quaternion orientation.
+        """Generates a simulated quaternion orientation.
 
         Args:
             quality (str): Data quality level - 'good', 'warn', or 'poor'
@@ -120,8 +115,7 @@ class SensorDataPublisher(Node):
         return quat
 
     def generate_angular_velocity(self, quality):
-        """
-        Generates a simulated angular velocity vector.
+        """Generates a simulated angular velocity vector.
 
         Args:
             quality (str): Data quality level - 'good', 'warn', or 'poor'
@@ -141,8 +135,7 @@ class SensorDataPublisher(Node):
         return vector
 
     def generate_linear_acceleration(self, quality):
-        """
-        Generates a simulated linear acceleration vector.
+        """Generates a simulated linear acceleration vector.
 
         Args:
             quality (str): Data quality level - 'good', 'warn', or 'poor'

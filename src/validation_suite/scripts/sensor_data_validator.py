@@ -20,9 +20,8 @@ from sensor_msgs.msg import Imu
 from diagnostic_msgs.msg import DiagnosticStatus
 
 class SensorDataValidator(Node):
-    """
-    Validates simulated IMU sensor data with probabilistic fault injection.
-    
+    """Validates simulated IMU sensor data with probabilistic fault injection.
+
     Subscribes to "/imu_data" topic, and validates that each topic msg
     has appropriate data values given the data quality type (OK/WARN/POOR)
 
@@ -82,8 +81,7 @@ class SensorDataValidator(Node):
         self.pub.publish(diag_msg)
 
     def validate_imu_header(self, header):
-        """
-        Validates a given IMU header
+        """Validates a given IMU header
 
         Args:
             msg: The given IMU header
@@ -94,8 +92,7 @@ class SensorDataValidator(Node):
         return stamp != Time(clock_type=ClockType.ROS_TIME) and frame_id == "imu_link"
 
     def validate_imu_orientation(self, orientation):
-        """
-        Validates a given IMU oritentation
+        """Validates a given IMU oritentation
 
         Args:
             orientation: The given IMU orientation
@@ -117,8 +114,7 @@ class SensorDataValidator(Node):
         return self.get_worst_status(value_tuple=(roll_deg, pitch_deg,yaw_deg), component="orientation", keys=("roll", "pitch", "yaw"))
 
     def validate_imu_angular_velocity(self, angular_velocity):
-        """
-        Validates a given IMU angular velocity
+        """Validates a given IMU angular velocity
 
         Args:
             angular_velocity: The given angular velocity
@@ -129,8 +125,7 @@ class SensorDataValidator(Node):
         return self.get_worst_status(value_tuple=(x,y,z), component="angular_velocity", keys=("x", "y", "z"))
 
     def validate_imu_linear_acceleration(self, linear_acceleration):
-        """
-        Validates a given IMU linear acceleration
+        """Validates a given IMU linear acceleration
 
         Args:
             linear_acceleration: The given linear acceleration
@@ -142,8 +137,7 @@ class SensorDataValidator(Node):
         return self.get_worst_status(value_tuple=(x,y,z), component="linear_acceleration", keys=("x", "y", "z"))
 
     def get_worst_status(self, value_tuple, component, keys):
-        """
-        Given 3 values (oritentation x/y/z, angular_velocity x/y/z, linear acclearation x/y/z),
+        """Given 3 values (oritentation x/y/z, angular_velocity x/y/z, linear acclearation x/y/z),
         classify each value and return the most severe status message
 
         Args:
@@ -162,8 +156,7 @@ class SensorDataValidator(Node):
         return worst
 
     def classify_value(self, value, component, key):
-        """
-        Given a value from a component, determine it's status (good/warn/poor)
+        """Given a value from a component, determine it's status (good/warn/poor)
 
         Args:
             value: The given value from the component

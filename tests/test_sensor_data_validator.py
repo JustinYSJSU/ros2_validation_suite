@@ -14,8 +14,7 @@ class TestSensorDataValidator():
     @pytest.mark.parametrize("time_valid, frame_id, valid_result", [(True, "imu_link", True),
     (False, "imu_link", False), (True, "not_imu", False), (False, "not_imu", False)])
     def test_validate_imu_header(self, sensor_data_validator, time_valid, frame_id, valid_result):
-        """
-        Test function validate_imu_header
+        """Test function validate_imu_header
 
         Fixture(s):
             - sensor_data_validator: Using sensor_data_validator fixture with module scope
@@ -36,8 +35,7 @@ class TestSensorDataValidator():
     (1.0,    1.0,    0.0, 0.0, "POOR"),
     ])
     def test_validate_imu_orientation(self, sensor_data_validator, w, x, y, z, expected):
-        """
-        Test function validate_imu_orientation
+        """Test function validate_imu_orientation
 
         Fixture(s):
             - sensor_data_validator: Using sensor_data_validator fixture with module scope
@@ -59,8 +57,7 @@ class TestSensorDataValidator():
     (8.0,  8.0,  8.0,  "POOR"),
     ])
     def test_validate_imu_angular_velocity(self, sensor_data_validator, x_cord, y_cord, z_cord, expected):
-        """
-        Test function validate_imu_angular_velocity
+        """Test function validate_imu_angular_velocity
 
         Fixture(s):
             - sensor_data_validator: Using sensor_data_validator fixture with module scope
@@ -81,8 +78,7 @@ class TestSensorDataValidator():
     (0.0,   0.0,  -5.0,  "POOR"),
     ])
     def test_validate_imu_linear_acceleration(self, sensor_data_validator, x_accel, y_accel, z_accel, expected):
-        """
-        Test function validate_imu_linear_acceleration
+        """Test function validate_imu_linear_acceleration
 
         Fixture(s):
             - sensor_data_validator: Using sensor_data_validator fixture with module scope
