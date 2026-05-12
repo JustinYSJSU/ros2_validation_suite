@@ -17,3 +17,6 @@ root/
 |---src/validation_suite/ # ROS 2 package directory
 |       |---scripts/ # directory containing publisher, validator, and alert nodes
 |---tests/ # directory containing automated test suite
+
+## CI / CD
+- On each commit & daily schedule (10 AM PST), action will run pytest suite
