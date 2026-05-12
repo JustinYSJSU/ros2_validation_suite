@@ -42,7 +42,7 @@ class SensorDataValidator(Node):
         Validates a given IMU message
 
         Args:
-            msg: The given IMU message
+            msg (sensor_msgs.Imu): The given IMU message
         """
 
         diag_msg = DiagnosticStatus()
@@ -84,7 +84,10 @@ class SensorDataValidator(Node):
         """Validates a given IMU header
 
         Args:
-            msg: The given IMU header
+            msg (diagnositc_msgs.msg): The given IMU header
+        
+        Returns:
+            true/false depending on if the given IMU msg header is valid
         """
         stamp = Time.from_msg(header.stamp)
         frame_id = header.frame_id
@@ -95,7 +98,10 @@ class SensorDataValidator(Node):
         """Validates a given IMU oritentation
 
         Args:
-            orientation: The given IMU orientation
+            orientation (geometry_msgs.msg): The given IMU orientation
+        
+        Returns:
+            string representing the worst status (ok/warn/poor) of the IMU orientation properties
         """
         x = orientation.x
         y = orientation.y
@@ -117,7 +123,7 @@ class SensorDataValidator(Node):
         """Validates a given IMU angular velocity
 
         Args:
-            angular_velocity: The given angular velocity
+            angular_velocity (geometry_msgs.msg - Vector3): The given angular velocity
         """
         x = angular_velocity.x
         y = angular_velocity.y
@@ -128,7 +134,7 @@ class SensorDataValidator(Node):
         """Validates a given IMU linear acceleration
 
         Args:
-            linear_acceleration: The given linear acceleration
+            linear_acceleration (geometry_msgs.msg - Vector3: The given linear acceleration
         """
         
         x = linear_acceleration.x
@@ -141,9 +147,9 @@ class SensorDataValidator(Node):
         classify each value and return the most severe status message
 
         Args:
-            value_tuple: A tuple containing all 3 values for a component (x/y/z)
-            component: The component that x/y/z are associated with (orientation, angular_velocity, linear acceleration)
-            keys: The tuple layout names of the corresponding component ("roll", "pitch", "yaw") / ("x", "y", "z")
+            value_tuple (tuple): A tuple containing all 3 values for a component (x/y/z)
+            component (str): The component that x/y/z are associated with (orientation, angular_velocity, linear acceleration)
+            keys (tuple): The tuple layout names of the corresponding component ("roll", "pitch", "yaw") / ("x", "y", "z")
         """
         severity = {"GOOD": 0, "WARN": 1, "POOR": 2}
         worst = "GOOD"
@@ -159,9 +165,9 @@ class SensorDataValidator(Node):
         """Given a value from a component, determine it's status (good/warn/poor)
 
         Args:
-            value: The given value from the component
-            component: The given component of the IMU
-            key: The specific field name to look up in IMU_RANGES (e.g. "roll", "x"
+            value (num): The given value from the component
+            component (str): The given component of the IMU
+            key (str): The specific field name to look up in IMU_RANGES (e.g. "roll", "x"
         """
         good_min, good_max = config.IMU_RANGES[component]["good"][key]
         warn_min, warn_max = config.IMU_RANGES[component]["warn"][key]
