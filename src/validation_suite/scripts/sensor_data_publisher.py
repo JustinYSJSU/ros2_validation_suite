@@ -51,7 +51,7 @@ class SensorDataPublisher(Node):
             N/A
 
         Returns:
-            msg: Valid, generaged message with appropriate quality-level data
+            msg (sensor_msgs.msg - Imu): Valid, generaged message with appropriate quality-level data
         """
         self.imu_quality_dict = self.imu_quality_dict.fromkeys(self.imu_quality_dict, "good") # reset quality dict before each msg
         msg = Imu()
@@ -80,7 +80,7 @@ class SensorDataPublisher(Node):
             N/A
 
         Returns:
-            msg: Valid, generated header
+            msg (std_msgs.msg - Header): Valid, generated header
         """
         head = Header()
         head.stamp = self.get_clock().now().to_msg()
@@ -94,7 +94,7 @@ class SensorDataPublisher(Node):
             quality (str): Data quality level - 'good', 'warn', or 'poor'
         
         Returns:
-            Quaternion: Valid unit quaternion within ranges defined by quality level
+            quat (geometry_msgs.msg - Quaternion): Valid unit quaternion within ranges defined by quality level
         """
         roll_deg = random.uniform(*config.IMU_RANGES['orientation'][quality]['roll'])
         pitch_deg = random.uniform(*config.IMU_RANGES['orientation'][quality]['pitch'])
@@ -121,7 +121,7 @@ class SensorDataPublisher(Node):
             quality (str): Data quality level - 'good', 'warn', or 'poor'
         
         Returns:
-            Vector3: Valid vector (rad/s) within ranges defined by quality level
+            vector (geometry_msgs.msg - Vector3): Valid vector (rad/s) within ranges defined by quality level
         """
         x_cord = random.uniform(*config.IMU_RANGES['angular_velocity'][quality]['x'])
         y_cord = random.uniform(*config.IMU_RANGES['angular_velocity'][quality]['y'])
@@ -141,7 +141,7 @@ class SensorDataPublisher(Node):
             quality (str): Data quality level - 'good', 'warn', or 'poor'
         
         Returns:
-            Vector3: Valid vector (m/s^2) within ranges defined by quality level
+            vector (geometry_msgs.msg - Vector3): Valid vector (m/s^2) within ranges defined by quality level
         """
         x_accel = random.uniform(*config.IMU_RANGES['linear_acceleration'][quality]['x'])
         y_accel = random.uniform(*config.IMU_RANGES['linear_acceleration'][quality]['y'])

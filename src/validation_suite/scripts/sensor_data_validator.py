@@ -42,7 +42,7 @@ class SensorDataValidator(Node):
         Validates a given IMU message
 
         Args:
-            msg (sensor_msgs.Imu): The given IMU message
+            msg (sensor_msgs.msg - Imu): The given IMU message
         """
 
         diag_msg = DiagnosticStatus()
