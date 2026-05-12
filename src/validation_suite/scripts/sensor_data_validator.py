@@ -1,6 +1,5 @@
 #!/usr/bin/python3
-"""
-sensor_data_validation.py
+"""sensor_data_validation.py
 
 ROS2 sensor data validator node for the IMU Sensor Validation Framework.
 Subscribes to the "/imu_data" topic from sensor_data_publisher.py and validates that the data is at

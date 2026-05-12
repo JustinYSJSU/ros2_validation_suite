@@ -1,6 +1,5 @@
 #!/usr/bin/python3
-"""
-sensor_data_publisher.py
+"""sensor_data_publisher.py
 
 ROS2 sensor data publisher node for the IMU Sensor Validation Framework.
 Generates simulated IMU data with configurable quality levels (good/warn/poor)
