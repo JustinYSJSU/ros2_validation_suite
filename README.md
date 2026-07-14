@@ -24,3 +24,6 @@ root/
 
 ## CI / CD
 - On each commit & daily schedule (10 AM PST), action will run pytest suite
+
+<img width="1594" height="705" alt="image" src="https://github.com/user-attachments/assets/f08cf730-1979-43a6-bd63-8899fc7f4e19" />
+
