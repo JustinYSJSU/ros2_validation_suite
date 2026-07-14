@@ -1,8 +1,11 @@
 # ROS 2 Validation Suite
 ------------------------
+**[Link to live dashboard](https://quirkywisteria3067.grafana.net/public-dashboards/74148b07187b4af7a8eaaa73b7b13a43)**
 
 ## Objective
 - A ROS 2 system for IMU sensor validation with an autoamted test suite and CI/CD pipeline
+- System runs on a Linux virtual machine (VM) hosted via Google Cloud.
+- System metrics are scaped & exposed via Prometheus, and displayed on Grafana for viewing
 
 ## Architecture
 ```
