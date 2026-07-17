@@ -8,11 +8,8 @@
 - System metrics are scaped & exposed via Prometheus, and displayed on Grafana for viewing
 
 ## Architecture
-```
-sensor_data_publisher.py => publish topic/imu_data
-sensor_data_publisher.py => subscribe to topic /imu_data, publish topic /imu_diag
-sensor_data_alert.py => subscribe to topic /imu_diag
-```
+<img width="992" height="464" alt="image" src="https://github.com/user-attachments/assets/45dd6c26-1818-46ff-b3a0-3f4a4d307ab0" />
+
 
 ## Folder / File Structure
 ```
