@@ -13,5 +13,5 @@
 - On each commit & daily schedule (10 AM PST), action will run pytest suite
 
 ## Screenshots
-<img width="1594" height="705" alt="image" src="https://github.com/user-attachments/assets/f08cf730-1979-43a6-bd63-8899fc7f4e19" />
-
+<img width="1827" height="839" alt="image" src="https://github.com/user-attachments/assets/5997864a-1f68-4b14-90b2-a8bda4a7b500" />
+<img width="1827" height="250" alt="image" src="https://github.com/user-attachments/assets/6a3f752b-ccbb-4b45-80d8-1c0ac027e7a3" />
