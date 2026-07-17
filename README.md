@@ -6,6 +6,7 @@
 - A ROS 2 system for IMU sensor validation with an autoamted test suite, CI/CD pipeline, and live data viusalization
   
 ## Architecture
+- On the Linux VM system, ROS 2 & Prometheus nodes are kept continuously running via `systemd service .service files`
 <img width="992" height="464" alt="image" src="https://github.com/user-attachments/assets/45dd6c26-1818-46ff-b3a0-3f4a4d307ab0" />
 
 ## CI / CD
