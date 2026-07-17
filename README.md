@@ -1,4 +1,4 @@
-# ROS 2 Validation Suite
+# ROS 2 System Monitoring
 ------------------------
 **[Link to live dashboard](https://quirkywisteria3067.grafana.net/public-dashboards/74148b07187b4af7a8eaaa73b7b13a43)**
 
