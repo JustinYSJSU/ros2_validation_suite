@@ -90,3 +90,17 @@ class OdometryPublisher(Node):
         msg.pose = self.generate_odometry_pose()
         msg.twist = self.generate_odometry_twist()
         self.pub.publish(msg)
+
+    def generate_odometry_header(self):
+        """Generates header for odometry message
+
+        Args:
+            N/A
+
+        Returns:
+            msg (std_msgs.msg - Header): Valid, generated header
+        """
+        head = Header()
+        head.stamp = self.get_clock().now().to_msg()
+        head.frame_id = "odometry_link"
+        return head
