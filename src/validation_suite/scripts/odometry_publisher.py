@@ -12,7 +12,7 @@ import config
 from rclpy.node import Node
 from nav_msgs.msg import Odometry
 from std_msgs.msg import Header
-from geometry_msgs.msg import TwistWithCovariance, PoseWithCovariance, Pose, Point, Quaternion
+from geometry_msgs.msg import TwistWithCovariance, PoseWithCovariance, Pose, Point, Quaternion, Vector3, Twist
 
 POSE = 1
 TWIST = 2
@@ -26,31 +26,29 @@ class OdometryPublisher(Node):
         Topics:
             /odometry_data
     """
-    super().__init__("odometry_publisher")
-    self.pub = self.create_publisher(Odometry, "odometry_data", self.publish_odometry, 10)
-    self.time = self.timer(0.5, self.generate_odometry_data)
 
-    self.pose_property_dict = {
-            1: "position",
+    def __init__(self):
+        super().__init__("odometry_publisher")
+        self.pub = self.create_publisher(Odometry, "odometry_data", 10)
+        self.time = self.create_timer(0.5, self.generate_odometry_data)
+
+        self.pose_property_dict = {
+                1: "position",
+                2: "covarience"
+        }
+        self.pose_quality_dict = {
+            "position": "good",
+            "covarience": "good"
+        }
+
+        self.twist_property_dict = {
+            1: "twist",
             2: "covarience"
-    }
-    self.pose_quality_dict = {
-        "position": "good",
-        "covarience": "good"
-    }
-
-    self.twist_property_dict = {
-        1: "linear_velocity",
-        2: "angular_velocity",
-        3: "linear_convarience",
-        4: "angular_covarience"
-    }
-    self.twist_quality_dict = {
-        "linear_velocity": "good",
-        "angular_velocity": "good",
-        "linear_convarience": "good",
-        "angular_covarience": "good"
-    }
+        }
+        self.twist_quality_dict = {
+            "twist": "good",
+            "covarience": "good"
+        }
 
     def generate_odometry_data(self):
         """Calculates the quality level (good/warn/poor), then
@@ -72,23 +70,22 @@ class OdometryPublisher(Node):
             impacted_property = random.randint(1, 2)
 
             if impacted_property == POSE:
-                impacted_subproperty = self.pose_property_dict[randint(1, 2)]
+                impacted_subproperty = self.pose_property_dict[random.randint(1, 2)]
                 self.pose_quality_dict[impacted_subproperty] = 'warn'
             elif impacted_property == TWIST:
-                impacted_subproperty = self.twist_property_dict[randint(1, 4)]
+                impacted_subproperty = self.twist_property_dict[random.randint(1, 2)]
                 self.twist_quality_dict[impacted_subproperty] = 'warn'
         else:
             impacted_property = random.randint(1, 2)
             if impacted_property == POSE:
-                impacted_subproperty = self.pose_property_dict[randint(1, 2)]
-                self.pose_quality_dict[impacted_subproperty] = 'warn'
+                impacted_subproperty = self.pose_property_dict[random.randint(1, 2)]
+                self.pose_quality_dict[impacted_subproperty] = 'poor'
             elif impacted_property == TWIST:
-                impacted_subproperty = self.twist_property_dict[randint(1, 4)]
-                self.twist_quality_dict[impacted_subproperty] = 'warn'
+                impacted_subproperty = self.twist_property_dict[random.randint(1, 2)]
+                self.twist_quality_dict[impacted_subproperty] = 'poor'
 
         msg.pose = self.generate_odometry_pose(quality=self.pose_quality_dict["position"]) # PoseWithCovarience
-
-        msg.twist = self.generate_odometry_twist()
+        msg.twist = self.generate_odometry_twist(quality=self.twist_quality_dict["twist"]) #TwistWithCovarience
         self.pub.publish(msg)
 
     def generate_odometry_header(self):
@@ -124,10 +121,10 @@ class OdometryPublisher(Node):
         pose_point.y = random.uniform(*config.POSE_WITH_COVARIANCE_RANGES["point"][quality]["y"])
         pose_point.z = random.uniform(*config.POSE_WITH_COVARIANCE_RANGES["point"][quality]["z"])
 
-        qx = random.uniform(*ranges["orientation"][quality]["x"])
-        qy = random.uniform(*ranges["orientation"][quality]["y"])
-        qz = random.uniform(*ranges["orientation"][quality]["z"])
-        qw = random.uniform(*ranges["orientation"][quality]["w"])
+        qx = random.uniform(*config.POSE_WITH_COVARIANCE_RANGES["orientation"][quality]["x"])
+        qy = random.uniform(*config.POSE_WITH_COVARIANCE_RANGES["orientation"][quality]["y"])
+        qz = random.uniform(*config.POSE_WITH_COVARIANCE_RANGES["orientation"][quality]["z"])
+        qw = random.uniform(*config.POSE_WITH_COVARIANCE_RANGES["orientation"][quality]["w"])
 
         # CLAUDE: normalization of quant
         norm = math.sqrt(qx**2 + qy**2 + qz**2 + qw**2)
@@ -148,3 +145,33 @@ class OdometryPublisher(Node):
         pose_with_covarience.covariance[0] = -1.0
 
         return pose_with_covarience
+
+    def genereate_odometry_twist(self, quality):
+        """Generates a simulated TwistWithCovarience msg
+
+        Args:
+            quality (str): Data quality level - 'good', 'warn', or 'poor'
+        
+        Returns:
+            pose (geometry_msgs.msg Pose)
+        """
+        twist_with_covarience = TwistWithCovariance()
+        twist = Twist()
+        twist_linear = Vector3()
+        twist_angular = Vector3()
+
+        twist_linear.x = random.uniform(*config.TWIST_WITH_COVARIANCE_RANGES["linear_velocity"][quality]["x"])
+        twist_linear.y = random.uniform(*config.TWIST_WITH_COVARIANCE_RANGES["linear_velocity"][quality]["y"])
+        twist_linear.z = random.uniform(*config.TWIST_WITH_COVARIANCE_RANGES["linear_velocity"][quality]["z"])
+
+        twist_angular.x = random.uniform(*config.TWIST_WITH_COVARIANCE_RANGES["angular_velocity"][quality]["x"])
+        twist_angular.y = random.uniform(*config.TWIST_WITH_COVARIANCE_RANGES["angular_velocity"][quality]["y"])
+        twist_angular.z = random.uniform(*config.TWIST_WITH_COVARIANCE_RANGES["angular_velocity"][quality]["z"])
+
+        twist.linear = twist_linear
+        twist.angular = twist_angular
+
+        twist_with_covarience.twist = twist
+        twist_with_covarience.covariance[0] = -1.0
+
+        return twist_with_covarience

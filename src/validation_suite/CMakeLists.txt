@@ -12,8 +12,9 @@ find_package(diagnostic_msgs REQUIRED)
 ament_python_install_package(scripts)
 
 install(PROGRAMS
-  scripts/sensor_data_publisher.py
-  scripts/sensor_data_validator.py
+  scripts/imu_publisher.py
+  scripts/node_data_validator.py
+  scripts/odometry_publisher.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
