@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 """odometry_publisher.py
 
 Generates simulated IMU data with configurable quality levels (good/warn/poor)
@@ -146,7 +148,7 @@ class OdometryPublisher(Node):
 
         return pose_with_covarience
 
-    def genereate_odometry_twist(self, quality):
+    def generate_odometry_twist(self, quality):
         """Generates a simulated TwistWithCovarience msg
 
         Args:
@@ -175,3 +177,17 @@ class OdometryPublisher(Node):
         twist_with_covarience.covariance[0] = -1.0
 
         return twist_with_covarience
+
+def main():
+    rclpy.init() # initialize ros2 communication
+    my_pub = OdometryPublisher()
+    print("Publishing")
+
+    try:
+        rclpy.spin(my_pub) # run until interrupt via keyboard
+    except KeyboardInterrupt:
+        print("Terminating node...")
+        my_pub.destroy_node()
+
+if __name__ == '__main__':
+        main()

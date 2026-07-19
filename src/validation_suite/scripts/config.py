@@ -59,7 +59,8 @@ TWIST_WITH_COVARIANCE_RANGES = {
             "y": (-15.0, 15.0),
             "z": (-5.0, 5.0),
         },
-
+    },
+    
     "angular_velocity": {
         "good": {
             "x": (-2.0, 2.0),
@@ -77,5 +78,5 @@ TWIST_WITH_COVARIANCE_RANGES = {
             "z": (-15.0, 15.0),
         },
     },
-    }
+    
 }

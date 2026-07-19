@@ -14,6 +14,7 @@ ament_python_install_package(scripts)
 install(PROGRAMS
   scripts/imu_publisher.py
   scripts/node_data_validator.py
+  scripts/config.py
   scripts/odometry_publisher.py
   DESTINATION lib/${PROJECT_NAME}
 )
