@@ -8,7 +8,7 @@ import rclpy
 import time
 from rclpy.node import Node
 from rclpy.qos import QoSProfile, ReliabilityPolicy
-from sensor_msgs.msg import Imu
+from sensor_msgs.msg import Imu, BatteryState
 from diagnostic_msgs.msg import DiagnosticStatus
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import TwistWithCovariance, PoseWithCovariance, Pose, Point, Quaternion, Vector3, Twist
@@ -21,6 +21,7 @@ class PromExporter(Node):
         self.create_subscription(Imu, "imu_data", self.callback, qos)
         self.create_subscription(Odometry, "odometry_data", self.odometry_callback, qos)
         self.create_subscription(DiagnosticStatus, "imu_diag", self.status_callback, qos)
+        self.create_subscription(BatteryState, "battery_data", self.battery_callback, qos)
 
         self.statues = Counter('sensor_status_total', 'Counter for each status',
         ['status'])
@@ -45,6 +46,9 @@ class PromExporter(Node):
         self.odo_orientation_x = Gauge('odometry_orientation_x', 'Odometry Orientation X')
         self.odo_orientation_y = Gauge('odometry_orientation_y', 'Odometry Orientation Y')
         self.odo_orientation_z = Gauge('odometry_orientation_z', 'Odometry Orientation Z')
+
+        self.battery_percentage = Gauge('battery_percentage', 'Battery Percentage')
+        self.battery_voltage = Gauge('battery_voltage', 'Battery Voltage')
 
     def callback(self, msg):
         """Set PromExporter node values to received metrics from topic msg
@@ -79,6 +83,14 @@ class PromExporter(Node):
         self.odo_orientation_x.set(msg.pose.pose.orientation.x)
         self.odo_orientation_y.set(msg.pose.pose.orientation.y)
         self.odo_orientation_z.set(msg.pose.pose.orientation.z)
+        
+    def battery_callback(self, msg):
+        """Set PromExporter node values to received metrics from topic msg
+
+        Args: msg (sensor_msgs.msg - BatteryState): The given BatteryState message
+        """
+        self.battery_percentage.set(msg.percentage)
+        self.battery_voltage.set(msg.voltage)
         
     def status_callback(self, msg):
         """Set PromExporter node values to received status value from topic msg
