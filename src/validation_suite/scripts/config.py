@@ -34,25 +34,6 @@ POSE_WITH_COVARIANCE_RANGES = {
             "z": (-20.0, 20.0),
         },
     },
-
-    # Diagonal covariance entries:
-    # x -> cov[0]
-    # y -> cov[7]
-    # z -> cov[14]
-    "position_covariance": {
-        "good": (0.0, 0.05),
-        "warn": (0.05, 0.20),
-        "poor": (0.20, 1.00),
-    },
-
-    # roll -> cov[21]
-    # pitch -> cov[28]
-    # yaw -> cov[35]
-    "orientation_covariance": {
-        "good": (0.0, 0.01),
-        "warn": (0.01, 0.05),
-        "poor": (0.05, 0.50),
-    },
 }
 
 TWIST_WITH_COVARIANCE_RANGES = {
@@ -90,23 +71,5 @@ TWIST_WITH_COVARIANCE_RANGES = {
             "y": (-15.0, 15.0),
             "z": (-15.0, 15.0),
         },
-    },
-
-    # linear.x -> cov[0]
-    # linear.y -> cov[7]
-    # linear.z -> cov[14]
-    "linear_covariance": {
-        "good": (0.0, 0.05),
-        "warn": (0.05, 0.20),
-        "poor": (0.20, 1.00),
-    },
-
-    # angular.x -> cov[21]
-    # angular.y -> cov[28]
-    # angular.z -> cov[35]
-    "angular_covariance": {
-        "good": (0.0, 0.01),
-        "warn": (0.01, 0.05),
-        "poor": (0.05, 0.50),
     },
 }
