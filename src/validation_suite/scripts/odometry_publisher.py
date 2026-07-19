@@ -12,8 +12,7 @@ import config
 from rclpy.node import Node
 from nav_msgs.msg import Odometry
 from std_msgs.msg import Header
-from geometry_msgs.msg import TwistWithCovariance
-from geometry_msgs.msg import PoseWithCovariance
+from geometry_msgs.msg import TwistWithCovariance, PoseWithCovariance, Pose, Point, Quaternion
 
 POSE = 1
 TWIST = 2
@@ -87,7 +86,8 @@ class OdometryPublisher(Node):
                 impacted_subproperty = self.twist_property_dict[randint(1, 4)]
                 self.twist_quality_dict[impacted_subproperty] = 'warn'
 
-        msg.pose = self.generate_odometry_pose()
+        msg.pose = self.generate_odometry_pose(quality=self.pose_quality_dict["position"]) # PoseWithCovarience
+
         msg.twist = self.generate_odometry_twist()
         self.pub.publish(msg)
 
@@ -104,3 +104,47 @@ class OdometryPublisher(Node):
         head.stamp = self.get_clock().now().to_msg()
         head.frame_id = "odometry_link"
         return head
+
+    def generate_odometry_pose(self, quality):
+        """Generates a simulated PoseWithCovarience msg
+
+        Args:
+            quality (str): Data quality level - 'good', 'warn', or 'poor'
+        
+        Returns:
+            pose (geometry_msgs.msg Pose)
+        """
+        pose_with_covarience = PoseWithCovariance()
+
+        pose = Pose()
+        pose_point = Point()
+        pose_quant = Quaternion()
+
+        pose_point.x = random.uniform(*config.POSE_WITH_COVARIANCE_RANGES["point"][quality]["x"])
+        pose_point.y = random.uniform(*config.POSE_WITH_COVARIANCE_RANGES["point"][quality]["y"])
+        pose_point.z = random.uniform(*config.POSE_WITH_COVARIANCE_RANGES["point"][quality]["z"])
+
+        qx = random.uniform(*ranges["orientation"][quality]["x"])
+        qy = random.uniform(*ranges["orientation"][quality]["y"])
+        qz = random.uniform(*ranges["orientation"][quality]["z"])
+        qw = random.uniform(*ranges["orientation"][quality]["w"])
+
+        # CLAUDE: normalization of quant
+        norm = math.sqrt(qx**2 + qy**2 + qz**2 + qw**2)
+        if norm == 0.0:
+            # Degenerate case (all-zero draw): fall back to identity orientation
+            qx, qy, qz, qw = 0.0, 0.0, 0.0, 1.0
+            norm = 1.0
+
+        pose_quant.x = qx / norm
+        pose_quant.y = qy / norm
+        pose_quant.z = qz / norm
+        pose_quant.w = qw / norm
+
+        pose.position = pose_point
+        pose.orientation = pose_quant
+
+        pose_with_covarience.pose = pose
+        pose_with_covarience.covariance[0] = -1.0
+
+        return pose_with_covarience

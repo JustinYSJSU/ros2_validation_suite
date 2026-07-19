@@ -17,7 +17,7 @@ IMU_RANGES = {
 }
 
 POSE_WITH_COVARIANCE_RANGES = {
-    "position": {
+    "point": {
         "good": {
             "x": (-20.0, 20.0),
             "y": (-20.0, 20.0),
@@ -33,6 +33,12 @@ POSE_WITH_COVARIANCE_RANGES = {
             "y": (-100.0, 100.0),
             "z": (-20.0, 20.0),
         },
+    },
+
+    "orientation": {
+        "good":  {"x": (-0.13, 0.13), "y": (-0.17, 0.17), "z": (-1.0, 1.0), "w": (0.85, 1.0)},
+        "warn":  {"x": (-0.26, 0.26), "y": (-0.30, 0.30), "z": (-1.0, 1.0), "w": (0.60, 1.0)},
+        "poor":  {"x": (-0.71, 0.71), "y": (-0.71, 0.71), "z": (-1.0, 1.0), "w": (-1.0, 1.0)}
     },
 }
 
@@ -54,13 +60,6 @@ TWIST_WITH_COVARIANCE_RANGES = {
             "z": (-5.0, 5.0),
         },
 
-    "position_covariance": {
-        "good": (0.0, 0.05),
-        "warn": (0.05, 0.20),
-        "poor": (0.20, 1.00),
-        },
-    },
-
     "angular_velocity": {
         "good": {
             "x": (-2.0, 2.0),
@@ -77,17 +76,6 @@ TWIST_WITH_COVARIANCE_RANGES = {
             "y": (-15.0, 15.0),
             "z": (-15.0, 15.0),
         },
-    
-    "linear_covariance": {
-        "good": (0.0, 0.05),
-        "warn": (0.05, 0.20),
-        "poor": (0.20, 1.00),
     },
-
-    "angular_covariance": {
-        "good": (0.0, 0.01),
-        "warn": (0.01, 0.05),
-        "poor": (0.05, 0.50),
-    },
-    },
+    }
 }
