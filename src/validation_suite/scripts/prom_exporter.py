@@ -72,13 +72,13 @@ class PromExporter(Node):
         """
         pose = msg.pose
 
-        self.pose_x = msg.pose.pose.position.x
-        self.pose_y = msg.pose.pose.position.y
-        self.pose_z = msg.pose.pose.position.z
+        self.pose_x.set(msg.pose.pose.position.x)
+        self.pose_y.set(msg.pose.pose.position.y)
+        self.pose_z.set(msg.pose.pose.position.z)
 
-        self.odo_orientation_x = msg.pose.pose.orientation.x
-        self.odo_orientation_y = msg.pose.pose.orientation.y
-        self.odo_orientation_z = msg.pose.pose.orientation.z
+        self.odo_orientation_x.set(msg.pose.pose.orientation.x)
+        self.odo_orientation_y.set(msg.pose.pose.orientation.y)
+        self.odo_orientation_z.set(msg.pose.pose.orientation.z)
         
     def status_callback(self, msg):
         """Set PromExporter node values to received status value from topic msg
