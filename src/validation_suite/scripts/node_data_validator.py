@@ -1,11 +1,10 @@
 #!/usr/bin/python3
-"""sensor_data_validation.py
+"""node_data_validator.py
 
-ROS2 sensor data validator node for the IMU Sensor Validation Framework.
-Subscribes to the "/imu_data" topic from sensor_data_publisher.py and validates that the data is at
+ROS2 node data validator node for the IMU Sensor Validation Framework.
+Subscribes to the various topcis from the ROS 2 system and validates that the data is at
 an appropriate value given the quality level
 
-Part of: ROS2 Sensor Validation & Testing Framework
 """
 import random
 import rclpy
