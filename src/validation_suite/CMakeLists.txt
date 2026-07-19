@@ -17,6 +17,7 @@ install(PROGRAMS
   scripts/odometry_publisher.py
   scripts/sensor_data_alert.py
   scripts/prom_exporter.py
+  scripts/battery_publisher.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
