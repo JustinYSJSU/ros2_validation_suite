@@ -14,8 +14,14 @@ ament_python_install_package(scripts)
 install(PROGRAMS
   scripts/imu_publisher.py
   scripts/node_data_validator.py
-  scripts/config.py
   scripts/odometry_publisher.py
+  scripts/sensor_data_alert.py
+  scripts/prom_exporter.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+install(FILES
+  scripts/config.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
