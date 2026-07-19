@@ -17,7 +17,7 @@ CHARGE_THRESHOLD = 0.5
 MIN_VOLTAGE = 9.0
 MAX_VOLTAGE = 12.0
 
-class BatteryNode(Node):
+class BatteryPublisher(Node):
     """Publishes simulated battery data and publishes to
     'battery_data' topic
 
@@ -76,3 +76,17 @@ class BatteryNode(Node):
             self.voltage = MAX_VOLTAGE
         elif self.battery_percentage <= CHARGE_THRESHOLD:
             self.is_charging = True
+
+def main():
+    rclpy.init() # initialize ros2 communication
+    my_pub = BatteryPublisher()
+    print("Publishing")
+
+    try:
+        rclpy.spin(my_pub) # run until interrupt via keyboard
+    except KeyboardInterrupt:
+        print("Terminating node...")
+        my_pub.destroy_node()
+
+if __name__ == '__main__':
+        main()
