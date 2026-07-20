@@ -21,6 +21,7 @@ class TestReceive:
             nonlocal received
             received = True
 
+        node_list_node.create_subscription(Imu, "/imu_data", imu_callback, 10)
         assert self.wait_for_message(
             node_list_node,
             lambda: received,
