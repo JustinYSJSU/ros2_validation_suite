@@ -63,7 +63,7 @@ class TestReceive:
             timeout=10
         )
        
-    def wait_for_message(node, condition, timeout):
+    def wait_for_message(self, node, condition, timeout):
         start = time.time()
 
         while time.time() - start < timeout:
