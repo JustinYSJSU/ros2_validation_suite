@@ -1,6 +1,6 @@
 required:
-- /battery_data
-- /imu_data
-- /odometry_data
-- /parameter_events
-- /rosout
+  /battery_data: "sensor_msgs/msg/BatteryState"
+  /imu_data: "sensor_msgs/msg/Imu"
+  /odometry_data: "nav_msgs/msg/Odometry"
+  /parameter_event: "rcl_interfaces/msg/ParameterEvent"
+  /rosout: "rcl_interfaces/msg/Log"
