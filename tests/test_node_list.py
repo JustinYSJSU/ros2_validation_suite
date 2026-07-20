@@ -19,7 +19,7 @@ class TestNodeTopicList:
         '''
         time.sleep(3)
         config = config_load('node_config.yaml')['required']
-        node_list = [name for name in node_list_node.get_node_names() if not name.startswith('_ros2_daemon')]
+        node_list = [name for name in node_list_node.get_node_names() if not name.startswith('_ros2cli_daemon')]
 
         assert set(node_list) == set(config)
 
@@ -34,6 +34,6 @@ class TestNodeTopicList:
         '''
         time.sleep(3)
         config = config_load('topic_config.yaml')['required']
-        topic_names = [topic[0] for topic in node_list]
+        topic_names = [topic[0] for topic in node_list_node.get_topic_names_and_types()]
 
         assert set(topic_names) == set(config)
