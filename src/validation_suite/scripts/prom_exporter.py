@@ -20,7 +20,6 @@ class PromExporter(Node):
         qos = QoSProfile(depth=10, reliability=ReliabilityPolicy.RELIABLE)
         self.create_subscription(Imu, "imu_data", self.callback, qos)
         self.create_subscription(Odometry, "odometry_data", self.odometry_callback, qos)
-        self.create_subscription(DiagnosticStatus, "imu_diag", self.status_callback, qos)
         self.create_subscription(BatteryState, "battery_data", self.battery_callback, qos)
 
         self.statues = Counter('sensor_status_total', 'Counter for each status',
@@ -92,20 +91,6 @@ class PromExporter(Node):
         self.battery_percentage.set(msg.percentage)
         self.battery_voltage.set(msg.voltage)
         
-    def status_callback(self, msg):
-        """Set PromExporter node values to received status value from topic msg
-
-        Args: msg (diagnostic_msgs.msg - DiagnosticStatus): The given status message
-        """
-        level = msg.level
-
-        if level == DiagnosticStatus.OK:
-            self.statues.labels(status='GOOD').inc()
-        elif level == DiagnosticStatus.WARN:
-            self.statues.labels(status='WARN').inc()
-        elif level == DiagnosticStatus.ERROR:
-            self.statues.labels(status='ERROR').inc()
-
 def main():
     rclpy.init()
     start_http_server(8000)
