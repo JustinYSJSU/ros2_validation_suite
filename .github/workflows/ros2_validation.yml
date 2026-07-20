@@ -37,6 +37,6 @@ jobs:
       run: |
         . /opt/ros/humble/setup.sh
         . install/setup.sh
-        ros2 run validaiton_suite battery_publisher.py & ros2 run validation_suite imu_publisher.py &
-        ros2 run odometry_publisher.py
+        ros2 run validation_suite battery_publisher.py & ros2 run validation_suite imu_publisher.py &
+        ros2 run validation_suite odometry_publisher.py
         cd tests && python3 -m pytest -v
