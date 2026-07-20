@@ -7,7 +7,8 @@
   
 ## Architecture
 - On the Linux VM system, ROS 2 & Prometheus nodes are kept continuously running via `systemd service .service files`
-<img width="992" height="464" alt="image" src="https://github.com/user-attachments/assets/45dd6c26-1818-46ff-b3a0-3f4a4d307ab0" />
+<img width="1228" height="728" alt="image" src="https://github.com/user-attachments/assets/5169d31c-305f-4103-ad70-0bf1488a5bda" />
+
 
 ## CI / CD
 - On each commit & daily schedule (10 AM PST), action will run pytest suite
