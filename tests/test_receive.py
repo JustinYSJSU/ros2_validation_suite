@@ -25,7 +25,7 @@ class TestReceive:
 
         time.sleep(3)
 
-        rclpy.spin_once(node_list_node, 3.0)
+        rclpy.spin_once(node_list_node, executor=None, timeout_sec=3.0)
         assert received
 
     def test_receive_battery_message(self, node_list_node):
@@ -42,7 +42,7 @@ class TestReceive:
 
         time.sleep(3)
         
-        rclpy.spin_once(node_list_node, 3.0)
+        rclpy.spin_once(node_list_node, executor=None, timeout_sec=3.0)
         assert received
 
     def test_receive_batter_message(self, node_list_node):
@@ -59,6 +59,6 @@ class TestReceive:
 
         time.sleep(3)
 
-        rclpy.spin_once(node_list_node, 3.0)
+        rclpy.spin_once(node_list_node, executor=None, timeout_sec=3.0)
         assert received
        
