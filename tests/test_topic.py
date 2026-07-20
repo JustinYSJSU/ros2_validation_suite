@@ -30,3 +30,25 @@ class TestTopic:
                 f"Expected: {expected_type}, "
                 f"Actual: {actual_types}"
             )
+    
+    def test_topic_count(self, node_list_node, config_load):
+        '''Test function to validate number of publisher / subscribers per topic
+         Expect the following topics to be active with the follwing counts
+            /battery_data:
+                publisher_count: 1
+                subscriber_count: 1
+            /imu_data:
+                publisher_count: 1
+                subscriber_count: 1
+            /odometry_data:
+                publisher_count: 1
+    s           ubscriber_count: 1
+        '''
+        time.sleep(3)
+        config_topics = config_load('topic_config_short.yaml')['required']
+        config_counts = config_load('topic_count_config.yaml')['required']
+
+        for topic in config_topics:
+            assert node_list_node.count_publishers(topic) == config_counts[topic]['publisher_count']
+            assert node_list_node.count_subscribers(topic) == config_counts[topic]['subscriber_count']
+

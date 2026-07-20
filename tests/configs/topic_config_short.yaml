@@ -1,0 +1,4 @@
+required:
+  - /battery_data
+  - /imu_data
+  - /odometry_data
