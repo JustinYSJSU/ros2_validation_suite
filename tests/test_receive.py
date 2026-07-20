@@ -23,8 +23,6 @@ class TestReceive:
 
         node_list_node.create_subscription(Imu, "/imu_data", imu_callback, 10)
 
-        time.sleep(3)
-
         rclpy.spin_once(node_list_node, executor=None, timeout_sec=10.0)
         assert received
 
@@ -40,8 +38,6 @@ class TestReceive:
 
         node_list_node.create_subscription(BatteryState, "/battery_data", battery_callback, 10)
 
-        time.sleep(3)
-        
         rclpy.spin_once(node_list_node, executor=None, timeout_sec=10.0)
         assert received
 
@@ -56,8 +52,6 @@ class TestReceive:
             received = True
 
         node_list_node.create_subscription(Odometry, "/odometry_data", odometry_callback, 10)
-
-        time.sleep(3)
 
         rclpy.spin_once(node_list_node, executor=None, timeout_sec=10.0)
         assert received
