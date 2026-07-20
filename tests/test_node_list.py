@@ -6,10 +6,10 @@ from config import IMU_RANGES
 from rclpy.time import Time
 from rclpy.clock import ClockType
 
-class TestNodeList:
+class TestNodeTopicList:
     
     def test_node_list(self, node_list_node, config_load):
-        '''Test function to validate # of active nodes in ROS 2 system
+        '''Test function to validate the active nodes in ROS 2 system
         Expect the following nodes to be active:
             /battery_publisher_node
             /imu_publisher_node
@@ -21,4 +21,19 @@ class TestNodeList:
         config = config_load('node_config.yaml')['required']
         node_list = [name for name in node_list_node.get_node_names() if not name.startswith('_ros2_daemon')]
 
-        assert set(node_list) == set(expected_nodes)
+        assert set(node_list) == set(config)
+
+    def test_topic_list(self, node_list_node, config_load):
+        '''Test function to validate the active topics in ROS 2 system
+        Expect the following topics to be active:
+            /battery_data
+            /imu_data
+            /odometry_data
+            /parameter_events
+            /rosout
+        '''
+        time.sleep(3)
+        config = config_load('topic_config.yaml')['required']
+        topic_names = [topic[0] for topic in node_list]
+
+        assert set(topic_names) == set(config)
