@@ -2,5 +2,4 @@ required:
   - imu_publisher_node
   - odometry_publisher_node
   - battery_publisher_node
-  - prom_exporter
   - 'discovery_node'
