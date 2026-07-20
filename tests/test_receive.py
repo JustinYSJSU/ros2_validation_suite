@@ -23,7 +23,7 @@ class TestReceive:
 
         node_list_node.create_subscription(Imu, "/imu_data", imu_callback, 10)
 
-        assert wait_for_message(
+        assert self.wait_for_message(
             node_list_node,
             lambda: received,
             timeout=10
@@ -42,7 +42,7 @@ class TestReceive:
         node_list_node.create_subscription(BatteryState, "/battery_data", battery_callback, 10)
 
         rclpy.spin_once(node_list_node, executor=None, timeout_sec=10.0)
-        assert wait_for_message(
+        assert self.wait_for_message(
             node_list_node,
             lambda: received,
             timeout=10
@@ -61,7 +61,7 @@ class TestReceive:
         node_list_node.create_subscription(Odometry, "/odometry_data", odometry_callback, 10)
 
         rclpy.spin_once(node_list_node, executor=None, timeout_sec=10.0)
-        assert wait_for_message(
+        assert self.wait_for_message(
             node_list_node,
             lambda: received,
             timeout=10
