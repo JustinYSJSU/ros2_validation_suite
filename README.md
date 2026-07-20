@@ -7,7 +7,8 @@
   
 ## Architecture
 - On the Linux VM system, ROS 2 & Prometheus nodes are kept continuously running via `systemd service .service files`
-<img width="1228" height="728" alt="image" src="https://github.com/user-attachments/assets/5169d31c-305f-4103-ad70-0bf1488a5bda" />
+<img width="1226" height="709" alt="image" src="https://github.com/user-attachments/assets/0608cbab-21ec-4704-bf78-15f88362b598" />
+
 
 
 ## CI / CD
