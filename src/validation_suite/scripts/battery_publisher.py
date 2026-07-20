@@ -26,7 +26,7 @@ class BatteryPublisher(Node):
     """
     
     def __init__(self):
-        super().__init__("battery_publisher")
+        super().__init__("battery_publisher_node")
         self.pub = self.create_publisher(BatteryState, "battery_data", 10)
         self.timer = self.create_timer(5.0, self.battery_callback)
 

@@ -26,7 +26,7 @@ class SensorDataPublisher(Node):
         /imu_data (sensor_msgs/Imu)
     """
     def __init__(self):
-        super().__init__("sensor_data_publisher_node")
+        super().__init__("imu_publisher_node")
         self.pub = self.create_publisher(Imu, "imu_data", 10)
         self.time = self.create_timer(0.5, self.generate_imu_data)
         self.imu_property_dict = {
