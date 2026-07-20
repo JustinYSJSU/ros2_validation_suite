@@ -21,11 +21,11 @@ class TestTopic:
         topics = dict(node_list_node.get_topic_names_and_types())
 
         for topic, expected_type in config.items():
-            assert topic in topics.items(), f"{topic} not found"
+            assert topic in topics.keys(), f"{topic} not found"
 
-            types = topics[topic]
+            actual_type = topics[topic]
 
-            assert expected_type in actual_types, (
+            assert expected_type in actual_type, (
                 f"{topic} has wrong type. "
                 f"Expected: {expected_type}, "
                 f"Actual: {actual_types}"
