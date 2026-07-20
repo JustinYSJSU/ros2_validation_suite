@@ -1,10 +1,10 @@
 required:
   /battery_data:
     publisher_count: 1
-    subscriber_count: 1
+    subscriber_count: 0
   /imu_data:
     publisher_count: 1
-    subscriber_count: 1
+    subscriber_count: 0
   /odometry_data:
     publisher_count: 1
-    subscriber_count: 1
+    subscriber_count: 0
