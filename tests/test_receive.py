@@ -2,6 +2,8 @@ import pytest
 import math
 import transforms3d
 import time
+import rclpy
+
 from rclpy.time import Time
 from rclpy.clock import ClockType
 from sensor_msgs.msg import Imu, BatteryState
@@ -23,6 +25,7 @@ class TestReceive:
 
         time.sleep(3)
 
+        rclpy.spin_once(node_list_node, 3.0)
         assert received
 
     def test_receive_battery_message(self, node_list_node):
@@ -38,7 +41,8 @@ class TestReceive:
         node_list_node.create_subscription(BatteryState, "/battery_data", battery_callback, 10)
 
         time.sleep(3)
-
+        
+        rclpy.spin_once(node_list_node, 3.0)
         assert received
 
     def test_receive_batter_message(self, node_list_node):
@@ -55,5 +59,6 @@ class TestReceive:
 
         time.sleep(3)
 
+        rclpy.spin_once(node_list_node, 3.0)
         assert received
        
