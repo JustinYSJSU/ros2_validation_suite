@@ -2,5 +2,5 @@ required:
   /battery_data: "sensor_msgs/msg/BatteryState"
   /imu_data: "sensor_msgs/msg/Imu"
   /odometry_data: "nav_msgs/msg/Odometry"
-  /parameter_event: "rcl_interfaces/msg/ParameterEvent"
+  /parameter_events: "rcl_interfaces/msg/ParameterEvent"
   /rosout: "rcl_interfaces/msg/Log"
