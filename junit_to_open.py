@@ -2,6 +2,9 @@ import sys
 import os
 import xml.etree.ElementTree as ET
 
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
 from opentelemetry import metrics
 from opentelemetry.sdk.metrics import MeterProvider
 from opentelemetry.sdk.metrics.export import (
