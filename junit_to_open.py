@@ -90,3 +90,5 @@ test_counter.add(
         "status": "passed"
     }
 )
+provider.force_flush()
+provider.shutdown()
