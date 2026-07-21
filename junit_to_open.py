@@ -49,7 +49,6 @@ provider = MeterProvider(
 metrics.set_meter_provider(provider)
 meter = metrics.get_meter("pytest")
 
-test_counter = meter.create_counter("pytest.tests", description="Number of tests by result")
 
 attributes = {
     "repository": os.getenv("GITHUB_REPOSITORY"),
@@ -58,6 +57,21 @@ attributes = {
     "workflow": os.getenv("GITHUB_WORKFLOW"),
     "run_number": os.getenv("GITHUB_RUN_NUMBER")
 }
+
+test_counter = meter.create_counter("pytest.tests", description="Number of tests by result")
+
+time_histogram = meter.create_histogram(
+    "pytest.duration.seconds",
+    description="Duration of the pytest suite"
+)
+
+time_histogram.record(
+    time,
+    {
+        "branch": attributes["branch"],
+        "repository": attributes["repository"]
+    }
+)
 
 for status, value in [
     ("passed", passed),
@@ -68,7 +82,6 @@ for status, value in [
     test_counter.add(
         value,
         {
-            **attributes,
             "status": status
         }
     )
