@@ -26,3 +26,12 @@ A combination of two main projects:
 <img width="1524" height="488" alt="Screenshot 2026-07-19 210949" src="https://github.com/user-attachments/assets/a53ab6c9-b9e8-4fdb-a48b-4a3c13ba3bdf" />
 
 ----------------------
+
+**QA Automation Suite**
+
+----------------------
+
+<img width="1514" height="427" alt="Screenshot 2026-07-21 001930" src="https://github.com/user-attachments/assets/4c860d05-c9a0-4c4b-a8b4-99a437d701a4" />
+<img width="1498" height="670" alt="Screenshot 2026-07-21 001946" src="https://github.com/user-attachments/assets/dc84bf90-36cf-4f95-8bed-5ea28d827aef" />
+
+----------------------
