@@ -85,7 +85,7 @@ attributes = {
     "workflow": os.getenv("GITHUB_WORKFLOW"),
 }
 
-"""
+
 test_counter.add(
     passed,
     {
@@ -93,6 +93,6 @@ test_counter.add(
         "status": "passed"
     }
 )
-"""
+
 provider.force_flush()
 provider.shutdown()
