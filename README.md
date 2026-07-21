@@ -17,9 +17,11 @@ A combination of two main projects:
 
 ## Screenshots
 
-Observability Platform
+**Observability Platform**
 
 ----------------------
 
 <img width="1525" height="797" alt="Screenshot 2026-07-19 210937" src="https://github.com/user-attachments/assets/a8552bdd-2e25-41f3-9ea9-b106283687d4" />
 <img width="1524" height="488" alt="Screenshot 2026-07-19 210949" src="https://github.com/user-attachments/assets/a53ab6c9-b9e8-4fdb-a48b-4a3c13ba3bdf" />
+
+----------------------
