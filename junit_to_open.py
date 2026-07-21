@@ -61,6 +61,9 @@ fail_gauge = meter.create_gauge(name="pytest_fail_counter", unit="1", descriptio
 skipped_gauge = meter.create_gauge(name="pytest_skipped_counter", unit="1", description="Number of skipped tests")
 time_gauge = meter.create_gauge(name="pytest_time_gague", unit="seconds", description="Time of the test suite")
 
+pass_gauge.set(passed)
+fail_gauge.set(failed)
+skipped_gauge.set(skipped)
 time_gauge.set(time)
 provider.force_flush()
 provider.shutdown()
