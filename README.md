@@ -7,7 +7,7 @@
 ## Objective
 A combination of two main projects:
 - A simulated ROS 2 System that continously publishes metrics for IMU, Odometry, and BatteryState data
-- An automated QA test suite to validation node availability, topic messages, and publisher/subscriber connectivity
+- An automated QA test suite to validate node availability, topic messages, and publisher/subscriber connectivity
   
 ## Architecture
 - On the Linux VM system, ROS 2 & Prometheus nodes are kept continuously running via `systemd service .service files`
