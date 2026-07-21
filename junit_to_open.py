@@ -4,6 +4,7 @@ import xml.etree.ElementTree as ET
 
 from opentelemetry import metrics
 from opentelemetry.sdk.metrics import MeterProvider
+from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.metrics.export import (
     PeriodicExportingMetricReader
 )
@@ -42,7 +43,14 @@ reader = PeriodicExportingMetricReader(
     exporter
 )
 
+resource = Resource.create(
+    {
+        "service.name": "ros2-validation-ci",
+    }
+)
+
 provider = MeterProvider(
+    resource=resource,
     metric_readers=[reader]
 )
 
@@ -53,9 +61,6 @@ meter = metrics.get_meter("pytest")
 attributes = {
     "repository": os.getenv("GITHUB_REPOSITORY"),
     "branch": os.getenv("GITHUB_REF_NAME"),
-    "commit": os.getenv("GITHUB_SHA", "")[:7],
-    "workflow": os.getenv("GITHUB_WORKFLOW"),
-    "run_number": os.getenv("GITHUB_RUN_NUMBER")
 }
 
 test_counter = meter.create_counter("pytest.tests", description="Number of tests by result")
