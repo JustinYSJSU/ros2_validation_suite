@@ -32,6 +32,10 @@ tests = int(suite.attrib.get("tests"))
 time = float(suite.attrib.get("time"))
 passed = tests - errors - failures- skipped
 
+header_value = os.environ["OTEL_EXPORTER_OTLP_HEADERS"]
+print("HEADER DEBUG:", repr(header_value))
+print("ENDPOINT DEBUG:", repr(os.environ["OTEL_EXPORTER_OTLP_ENDPOINT"]))
+
 exporter = OTLPMetricExporter(
     endpoint=os.environ["OTEL_EXPORTER_OTLP_ENDPOINT"],
     headers={
