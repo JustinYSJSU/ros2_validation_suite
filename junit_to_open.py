@@ -56,32 +56,11 @@ provider = MeterProvider(
 metrics.set_meter_provider(provider)
 meter = metrics.get_meter("pytest")
 
-"""
-attributes = {
-    "repository": os.getenv("GITHUB_REPOSITORY"),
-    "branch": os.getenv("GITHUB_REF_NAME"),
-}
-"""
-
-# test_counter = meter.create_counter("pytest.tests", description="Number of tests by result")
-
+pass_gauge = meter.create_gauge(name="pytest_pass_counter", unit=1, description="Number of passed tests")
+fail_gauge = meter.create_gauge(name="pytest_fail_counter", unit=1, description="Number of failed tests")
+skipped_gauge = meter.create_gauge(name="pytest_skipped_counter", unit=1, description="Number of skipped tests")
 time_gauge = meter.create_gauge(name="pytest_time_gague", unit="seconds", description="Time of the test suite")
 
 time_gauge.set(time)
-
-"""
-for status, value in [
-    ("passed", passed),
-    ("failed", failures),
-    ("errors", errors),
-    ("skipped", skipped),
-]:
-    test_counter.add(
-        value,
-        {
-            "status": status
-        }
-    )
-"""
 provider.force_flush()
 provider.shutdown()
