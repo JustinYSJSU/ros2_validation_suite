@@ -50,33 +50,6 @@ metrics.set_meter_provider(provider)
 meter = metrics.get_meter("pytest")
 
 test_counter = meter.create_counter("pytest.tests", description="Number of tests by result")
-test_counter.add(
-    passed,
-    {
-        "status": "passed"
-    }
-)
-
-test_counter.add(
-    failures,
-    {
-        "status": "failed"
-    }
-)
-
-test_counter.add(
-    errors,
-    {
-        "status": "errors"
-    }
-)
-
-test_counter.add(
-    skipped,
-    {
-        "status": "skipped"
-    }
-)
 
 attributes = {
     "repository": os.getenv("GITHUB_REPOSITORY"),
@@ -85,14 +58,19 @@ attributes = {
     "workflow": os.getenv("GITHUB_WORKFLOW"),
 }
 
-
-test_counter.add(
-    passed,
-    {
-        **attributes,
-        "status": "passed"
-    }
-)
+for status, value in [
+    ("passed", passed),
+    ("failed", failures),
+    ("errors", errors),
+    ("skipped", skipped),
+]:
+    test_counter.add(
+        value,
+        {
+            **attributes,
+            "status": status
+        }
+    )
 
 provider.force_flush()
 provider.shutdown()
