@@ -43,6 +43,10 @@ exporter = OTLPMetricExporter(
     },
 )
 
+raw = os.environ["OTEL_EXPORTER_OTLP_HEADERS"]
+print("RAW LEN:", len(raw))
+print("RAW BYTES:", raw.encode("unicode_escape"))
+
 reader = PeriodicExportingMetricReader(
     exporter
 )
