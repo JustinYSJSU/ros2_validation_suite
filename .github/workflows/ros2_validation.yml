@@ -45,4 +45,4 @@ jobs:
         OTEL_EXPORTER_OTLP_ENDPOINT: ${{ secrets.GRAFANA_OTLP_ENDPOINT }}
         OTEL_EXPORTER_OTLP_HEADERS: ${{ secrets.GRAFANA_OTLP_HEADERS }}
       run: | 
-        python3 juni_to_open.py report.xml
+        python3 junit_to_open.py report.xml
