@@ -56,6 +56,7 @@ attributes = {
     "branch": os.getenv("GITHUB_REF_NAME"),
     "commit": os.getenv("GITHUB_SHA", "")[:7],
     "workflow": os.getenv("GITHUB_WORKFLOW"),
+    "run_id": os.getenv("GITHUB_RUN_ID")
 }
 
 for status, value in [
