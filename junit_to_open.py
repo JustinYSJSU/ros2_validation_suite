@@ -49,23 +49,29 @@ provider = MeterProvider(
 metrics.set_meter_provider(provider)
 meter = metrics.get_meter("pytest")
 
-test_gauge = meter.create_gauge("pytest.tests", description="Number of tests by result")
+test_counter = meter.create_counter("pytest.tests", description="Number of tests by result")
+test_counter.add(
+    passed,
+    {
+        "status": "passed"
+    }
+)
 
-test_gauge.add(
+test_counter.add(
     failures,
     {
         "status": "failed"
     }
 )
 
-test_gauge.add(
+test_counter.add(
     errors,
     {
         "status": "errors"
     }
 )
 
-test_gauge.add(
+test_counter.add(
     skipped,
     {
         "status": "skipped"
@@ -80,7 +86,7 @@ attributes = {
 }
 
 
-test_gauge.add(
+test_counter.add(
     passed,
     {
         **attributes,
