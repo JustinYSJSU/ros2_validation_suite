@@ -46,6 +46,7 @@ reader = PeriodicExportingMetricReader(
 resource = Resource.create(
     {
         "service.name": "ros2-validation-ci",
+        "service.instance.id": "ros2-validation-ci",
     }
 )
 
