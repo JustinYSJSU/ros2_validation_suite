@@ -30,8 +30,6 @@ tests = int(suite.attrib.get("tests"))
 time = float(suite.attrib.get("time"))
 passed = tests - errors - failures- skipped
 
-header_value = os.environ["OTEL_EXPORTER_OTLP_HEADERS"]
-
 exporter = OTLPMetricExporter(
     endpoint=os.environ["OTEL_EXPORTER_OTLP_ENDPOINT"],
     headers={
@@ -58,27 +56,20 @@ provider = MeterProvider(
 metrics.set_meter_provider(provider)
 meter = metrics.get_meter("pytest")
 
-
+"""
 attributes = {
     "repository": os.getenv("GITHUB_REPOSITORY"),
     "branch": os.getenv("GITHUB_REF_NAME"),
 }
+"""
 
-test_counter = meter.create_counter("pytest.tests", description="Number of tests by result")
+# test_counter = meter.create_counter("pytest.tests", description="Number of tests by result")
 
-time_histogram = meter.create_histogram(
-    "pytest.duration.seconds",
-    description="Duration of the pytest suite"
-)
+time_gauge = meter.create_gauge(name="pytest_time_gague", unit="seconds", description="Time of the test suite")
 
-time_histogram.record(
-    time,
-    {
-        "branch": attributes["branch"],
-        "repository": attributes["repository"]
-    }
-)
+time_gauge.set(time)
 
+"""
 for status, value in [
     ("passed", passed),
     ("failed", failures),
@@ -91,6 +82,6 @@ for status, value in [
             "status": status
         }
     )
-
+"""
 provider.force_flush()
 provider.shutdown()
