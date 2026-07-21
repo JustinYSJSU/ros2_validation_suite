@@ -2,9 +2,6 @@ import sys
 import os
 import xml.etree.ElementTree as ET
 
-import logging
-logging.basicConfig(level=logging.DEBUG)
-
 from opentelemetry import metrics
 from opentelemetry.sdk.metrics import MeterProvider
 from opentelemetry.sdk.metrics.export import (
@@ -33,8 +30,6 @@ time = float(suite.attrib.get("time"))
 passed = tests - errors - failures- skipped
 
 header_value = os.environ["OTEL_EXPORTER_OTLP_HEADERS"]
-print("HEADER DEBUG:", repr(header_value))
-print("ENDPOINT DEBUG:", repr(os.environ["OTEL_EXPORTER_OTLP_ENDPOINT"]))
 
 exporter = OTLPMetricExporter(
     endpoint=os.environ["OTEL_EXPORTER_OTLP_ENDPOINT"],
@@ -42,10 +37,6 @@ exporter = OTLPMetricExporter(
         "Authorization": os.environ["OTEL_EXPORTER_OTLP_HEADERS"].strip()
     },
 )
-
-raw = os.environ["OTEL_EXPORTER_OTLP_HEADERS"]
-print("RAW LEN:", len(raw))
-print("RAW BYTES:", raw.encode("unicode_escape"))
 
 reader = PeriodicExportingMetricReader(
     exporter
@@ -94,6 +85,7 @@ attributes = {
     "workflow": os.getenv("GITHUB_WORKFLOW"),
 }
 
+"""
 test_counter.add(
     passed,
     {
@@ -101,5 +93,6 @@ test_counter.add(
         "status": "passed"
     }
 )
+"""
 provider.force_flush()
 provider.shutdown()
