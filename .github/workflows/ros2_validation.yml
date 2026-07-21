@@ -39,4 +39,10 @@ jobs:
         . install/setup.sh
         ros2 run validation_suite battery_publisher.py & ros2 run validation_suite imu_publisher.py &
         ros2 run validation_suite odometry_publisher.py & sleep 5
-        cd tests && python3 -m pytest -v --junitxml=report.xml
+        python3 -m pytest -v --junitxml=report.xml
+    - name: export test metrics
+      env:
+        OTEL_EXPORTER_OTLP_ENDPOINT: ${{ secrets.GRAFANA_OTLP_ENDPOINT }}
+        OTEL_EXPORTER_OTLP_HEADERS: ${{ secrets.GRAFANA_OTLP_HEADERS }}
+      run: | 
+        python3 junit_to_open.py report.xml
