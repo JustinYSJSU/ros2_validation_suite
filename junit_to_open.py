@@ -39,7 +39,7 @@ print("ENDPOINT DEBUG:", repr(os.environ["OTEL_EXPORTER_OTLP_ENDPOINT"]))
 exporter = OTLPMetricExporter(
     endpoint=os.environ["OTEL_EXPORTER_OTLP_ENDPOINT"],
     headers={
-        "Authorization": os.environ["OTEL_EXPORTER_OTLP_HEADERS"]
+        "Authorization": os.environ["OTEL_EXPORTER_OTLP_HEADERS"].strip()
     },
 )
 
