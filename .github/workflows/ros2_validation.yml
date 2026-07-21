@@ -39,4 +39,4 @@ jobs:
         . install/setup.sh
         ros2 run validation_suite battery_publisher.py & ros2 run validation_suite imu_publisher.py &
         ros2 run validation_suite odometry_publisher.py & sleep 5
-        cd tests && python3 -m pytest -v
+        cd tests && python3 -m pytest -v --junitxml=report.xml
