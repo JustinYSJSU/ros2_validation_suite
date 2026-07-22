@@ -46,7 +46,7 @@ class TestReceive:
             timeout=10
         )
 
-    def test_receive_batter_message(self, node_list_node):
+    def test_receive_odometry_message(self, node_list_node):
         '''
         Test function to validate Odometry messages are able to be received
         '''
