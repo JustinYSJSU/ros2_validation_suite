@@ -21,9 +21,8 @@ A combination of two main projects:
 **Observability Platform**
 
 ----------------------
-
-<img width="1525" height="797" alt="Screenshot 2026-07-19 210937" src="https://github.com/user-attachments/assets/a8552bdd-2e25-41f3-9ea9-b106283687d4" />
-<img width="1524" height="488" alt="Screenshot 2026-07-19 210949" src="https://github.com/user-attachments/assets/a53ab6c9-b9e8-4fdb-a48b-4a3c13ba3bdf" />
+<img width="1521" height="713" alt="Screenshot 2026-07-22 121500" src="https://github.com/user-attachments/assets/5e3f926b-4f23-42f8-ad68-057f8c485353" />
+<img width="1499" height="328" alt="Screenshot 2026-07-22 121513" src="https://github.com/user-attachments/assets/ebde54e7-a2fa-4e1e-b731-deec7418adce" />
 
 ----------------------
 
