@@ -46,7 +46,7 @@ tests = int(suite.attrib.get("tests"))
 time = float(suite.attrib.get("time"))
 
 
-test_cases = suite.findall("test_case")
+test_cases = suite.findall("testcase")
 
 passed = tests - errors - failures - skipped
 exporter = OTLPMetricExporter(
