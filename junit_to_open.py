@@ -23,8 +23,8 @@ def get_test_case_status(test_case):
     """
     return(
         "failed" if test_case.find("failure") is not None else
-        "error" if test_case_find("error") is not None else
-        "skipped" if test_case_find ("skipped") is not None else
+        "error" if test_case.find("error") is not None else
+        "skipped" if test_case.find("skipped") is not None else
         "passed"
     )
 
