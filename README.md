@@ -21,8 +21,9 @@ A combination of two main projects:
 **Observability Platform**
 
 ----------------------
-<img width="1521" height="713" alt="Screenshot 2026-07-22 121500" src="https://github.com/user-attachments/assets/5e3f926b-4f23-42f8-ad68-057f8c485353" />
-<img width="1499" height="328" alt="Screenshot 2026-07-22 121513" src="https://github.com/user-attachments/assets/ebde54e7-a2fa-4e1e-b731-deec7418adce" />
+
+<img width="1525" height="797" alt="Screenshot 2026-07-19 210937" src="https://github.com/user-attachments/assets/46c43bda-eb06-4aae-a74e-86384ce3ce20" />
+<img width="1524" height="488" alt="Screenshot 2026-07-19 210949" src="https://github.com/user-attachments/assets/2f7f4a68-e606-4c64-8ac3-791d89e3671b" />
 
 ----------------------
 
@@ -30,7 +31,7 @@ A combination of two main projects:
 
 ----------------------
 
-<img width="1514" height="427" alt="Screenshot 2026-07-21 001930" src="https://github.com/user-attachments/assets/4c860d05-c9a0-4c4b-a8b4-99a437d701a4" />
-<img width="1498" height="670" alt="Screenshot 2026-07-21 001946" src="https://github.com/user-attachments/assets/dc84bf90-36cf-4f95-8bed-5ea28d827aef" />
+<img width="1521" height="713" alt="Screenshot 2026-07-22 121500" src="https://github.com/user-attachments/assets/aacff137-1552-4836-b09c-c5dfab0a8176" />
+<img width="1499" height="328" alt="Screenshot 2026-07-22 121513" src="https://github.com/user-attachments/assets/8da75a38-c6f2-489e-a6eb-c97917ec60ad" />
 
 ----------------------
