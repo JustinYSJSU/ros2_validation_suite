@@ -28,8 +28,8 @@ failures = int(suite.attrib.get("failures"))
 skipped = int(suite.attrib.get("skipped"))
 tests = int(suite.attrib.get("tests"))
 time = float(suite.attrib.get("time"))
-passed = tests - errors - failures- skipped
 
+passed = tests - errors - failures - skipped
 exporter = OTLPMetricExporter(
     endpoint=os.environ["OTEL_EXPORTER_OTLP_ENDPOINT"],
     headers={
@@ -60,6 +60,7 @@ pass_gauge = meter.create_gauge(name="pytest_pass_counter", unit="1", descriptio
 fail_gauge = meter.create_gauge(name="pytest_fail_counter", unit="1", description="Number of failed tests")
 skipped_gauge = meter.create_gauge(name="pytest_skipped_counter", unit="1", description="Number of skipped tests")
 time_gauge = meter.create_gauge(name="pytest_time_gague", unit="seconds", description="Time of the test suite")
+tests_gauge = meter.create_gauge(name="pytest_test_count",unit="1",description="Number of tests in suite")
 
 pass_gauge.set(passed)
 fail_gauge.set(failures)
