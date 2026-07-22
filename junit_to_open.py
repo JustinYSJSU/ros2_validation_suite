@@ -85,7 +85,7 @@ test_cases_gauge = meter.create_gauge(name="pytest_test_cases", unit="1", descri
 for test_case in test_cases:
     test_case_status = get_test_case_status(test_case=test_case)
 
-    test_cases_gauge.add(
+    test_cases_gauge.set(
         1,
         {
             "test": test_case.attrib["name"],
