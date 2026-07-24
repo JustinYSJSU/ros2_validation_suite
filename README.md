@@ -14,7 +14,7 @@ A combination of two main projects:
 <img width="1226" height="709" alt="image" src="https://github.com/user-attachments/assets/0608cbab-21ec-4704-bf78-15f88362b598" />
 
 ## CI / CD
-- On each commit & daily schedule (10 AM PST), automated QA test suite is ran
+- On each commit & daily schedule (3x/day), QA automation suite is ran
 
 ## Screenshots
 
