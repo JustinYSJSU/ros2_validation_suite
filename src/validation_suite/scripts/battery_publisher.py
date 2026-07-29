@@ -6,8 +6,6 @@ Generates simulated battery data and publishes to the 'battery_data' topic at 5.
 """
 import random
 import rclpy
-import transforms3d
-import math
 import config
 from rclpy.node import Node
 from std_msgs.msg import Header
