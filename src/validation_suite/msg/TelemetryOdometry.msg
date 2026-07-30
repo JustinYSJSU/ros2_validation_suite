@@ -1,4 +1,4 @@
-std_/msgs/Header header
+std_msgs/Header header
 
 float64 message_rate_hz
 float64 msg_age_ms
