@@ -1,5 +1,3 @@
-TelemetryImu.msg
-
 std_msgs/Header header
 
 float64 message_rate_hz
