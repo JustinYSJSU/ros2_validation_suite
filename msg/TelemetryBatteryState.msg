@@ -1,0 +1,8 @@
+TelemetryBatteryState.msg
+
+std_msgs/msgs/Header header
+float64 message_rate_hz
+float64 msg_age_ms
+
+float64 battery_percentage
+float64 battery_voltage

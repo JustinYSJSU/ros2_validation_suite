@@ -1,0 +1,16 @@
+TelemetryOdometry.msg
+
+std/msgs/Header header
+
+float64 message_rate_hz
+float64 msg_age_ms
+
+float64 odometry_pose_x
+float64 odometry_pose_y
+float64 odometry_pose_z
+
+float64 odometry_orientation_x
+float64 odometry_orientation_y
+float64 odometry_orientation_z
+
+string status
