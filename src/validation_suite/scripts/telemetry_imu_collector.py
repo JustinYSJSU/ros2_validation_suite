@@ -5,20 +5,16 @@ Subscribe to topic '/imu_data' and collect metrics to be used in telemetry analy
 Publishes custom message TelemetryImu
 
 """
-import random
 import rclpy
 import transforms3d
 import math
 import config
-import time
 from collections import deque
 from rclpy.node import Node
 from rclpy.time import Time
 from rclpy.qos import QoSProfile, ReliabilityPolicy
 from sensor_msgs.msg import Imu
 from std_msgs.msg import Header
-from geometry_msgs.msg import Quaternion # orientation
-from geometry_msgs.msg import Vector3 # angular_velocity + linear acceleration
 from validation_suite.msg import TelemetryImu
 
 class TelemetryImuCollector(Node):
