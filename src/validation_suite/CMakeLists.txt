@@ -25,7 +25,7 @@ install(PROGRAMS
   scripts/odometry_publisher.py
   scripts/prom_exporter.py
   scripts/battery_publisher.py
-  scripts/telemetry_imu_collector.py
+  scripts/telemetry_collector.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
