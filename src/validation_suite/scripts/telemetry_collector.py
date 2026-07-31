@@ -14,18 +14,22 @@ from rclpy.node import Node
 from rclpy.time import Time
 from rclpy.qos import QoSProfile, ReliabilityPolicy
 from sensor_msgs.msg import Imu
+from nav_msgs.msg import Odometry
 from std_msgs.msg import Header
 from validation_suite.msg import TelemetryImu
 
-class TelemetryImuCollector(Node):
+class TelemetryCollector(Node):
 
     TIMESTAMPS_MIN_LEN = 2
     def __init__(self):
         super().__init__("telemetry_imu_node")
         qos = QoSProfile(depth=10, reliability=ReliabilityPolicy.RELIABLE)
-        self.timestamps = deque(maxlen=25)
+        self.imu_timestamps = deque(maxlen=25)
+        self.odometry_timestamps = deque(maxlen=25)
         self.pub = self.create_publisher(msg_type=TelemetryImu, topic="/telemetry_imu", qos_profile=qos)
+        self.pub = self.create_publisher(msg_type=TelemetryOdometry, topic="/telemetry_odometry", qos_profile=qos)
         self.sub = self.create_subscription(msg_type=Imu, topic="/imu_data", callback=self.imu_callback, qos_profile=qos)
+        self.sub = self.create_subscription(msg_type=Odometry, topic="/odometry_data", callback=self.odometry_callback, qos_profile=qos)
     
     def imu_callback(self, msg):
         """
@@ -42,21 +46,6 @@ class TelemetryImuCollector(Node):
 
         telemetry_msg = TelemetryImu()
 
-        current = self.get_clock().now()
-        self.timestamps.append(current.nanoseconds)
-
-        if len(self.timestamps) >= self.TIMESTAMPS_MIN_LEN:
-            elapsed = (self.timestamps[-1] - self.timestamps[0]) / 1e9
-
-            if elapsed > 0:
-                telemetry_msg.message_rate_hz = (len(self.timestamps) - 1) / elapsed
-            else:
-                telemetry_msg.message_rate_hz = 0.0
-        else:
-            telemetry_msg.message_rate_hz = 0.0
-
-        telemetry_msg.msg_age_ms = (self.get_clock().now() - Time.from_msg(msg.header.stamp)).nanoseconds / 1e6
-
         telemetry_msg.angular_velocity_x = msg.angular_velocity.x
         telemetry_msg.angular_velocity_y = msg.angular_velocity.y
         telemetry_msg.angular_velocity_z = msg.angular_velocity.z
@@ -69,6 +58,9 @@ class TelemetryImuCollector(Node):
         telemetry_msg.linear_acceleration_y = msg.linear_acceleration.y
         telemetry_msg.linear_acceleration_z = msg.linear_acceleration.z
 
+        telemetry_msg.msg_age_ms = (self.get_clock().now() - Time.from_msg(msg.header.stamp)).nanoseconds / 1e6
+
+        telemetry_msg.message_rate_hz = self.calculate_freq(timestamps=self.imu_timestamps)
         orientation_result = self.validate_imu_orientation(orientation=orientation)
         angular_velocity_result = self.validate_imu_angular_velocity(angular_velocity=angular_velocity)
         linear_acceleration_result = self.validate_imu_linear_acceleration(linear_acceleration=linear_acceleration)
@@ -76,6 +68,22 @@ class TelemetryImuCollector(Node):
         linear_acceleration_status=linear_acceleration_result)
 
         self.pub.publish(msg=telemetry_msg)
+
+    def calculate_freq(self, timestamps):
+        freq = 0.0
+        current = self.get_clock().now()
+        timestamps.append(current.nanoseconds)
+
+        if len(self.timestamps) >= self.TIMESTAMPS_MIN_LEN:
+            elapsed = (timestamps[-1] - timestamps[0]) / 1e9
+
+            if elapsed > 0:
+                freq = (len(timestamps) - 1) / elapsed
+            else:
+                freq = 0.0
+        else:
+            freq = 0.0
+        return freq
 
     def validate_imu_orientation(self, orientation):
         """Validates a given IMU oritentation
