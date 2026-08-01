@@ -112,7 +112,7 @@ class TelemetryCollector(Node):
         """
         Validates a given odometry position
 
-        Args: position (geometry_msgs/msg/PoseWithCovariance): The given odometry position
+        Args: position (geometry_msgs/msg/Point): The given odometry position
 
         Returns: 
             string representing the worst status (ok/warn/poor) of the IMU orientation properties
@@ -122,6 +122,22 @@ class TelemetryCollector(Node):
         position_z = position.z
 
         return self.get_worst_status(value_tuple=(position_x, position_y, position_z), component="point", keys=("x", "y", "z"), attribute_type="odo_pose")
+
+    def validate_odometry_orientation(self, orientation):
+        """
+        Validates a given odometry position
+
+        Args: position (geometry_msgs/msg/Quaternion): The given odometry orientation
+
+        Returns: 
+            string representing the worst status (ok/warn/poor) of the IMU orientation properties
+        """
+        orientation_x = orientation.x
+        orientation_y = orientation.y
+        orientation_z = orientation.z
+        orientation_w = orientation.w
+
+        return self.get_worst_status(value_tuple=(position_x, position_y, position_z), component="orientation", keys=("x", "y", "z", "w"), attribute_type="odo_orientation")
 
     def validate_imu_orientation(self, orientation):
         """Validates a given IMU oritentation
@@ -206,12 +222,9 @@ class TelemetryCollector(Node):
         if attribute_type == "imu":
             good_min, good_max = config.IMU_RANGES[component]["good"][key]
             warn_min, warn_max = config.IMU_RANGES[component]["warn"][key]  
-        elif attribute_type == "odo_pose":
-            good_min, good_max = config.POSE_WITH_COVARIANCE_RANGES[component]["good"][key]
-            warn_min, warn_max = config.POSE_WITH_COVARIANCE_RANGES[component]["warn"][key]  
         else:
-            good_min, good_max = config.TWIST_WITH_COVARIANCE_RANGES[component]["good"][key]
-            warn_min, warn_max = config.TWIST_WITH_COVARIANCE_RANGES[component]["warn"][key] 
+            good_min, good_max = config.POSE_WITH_COVARIANCE_RANGES[component]["good"][key]
+            warn_min, warn_max = config.POSE_WITH_COVARIANCE_RANGES[component]["warn"][key] 
 
         if good_min <= value <= good_max:
             return "GOOD"
