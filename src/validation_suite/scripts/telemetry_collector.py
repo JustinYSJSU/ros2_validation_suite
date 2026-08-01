@@ -16,7 +16,7 @@ from rclpy.qos import QoSProfile, ReliabilityPolicy
 from sensor_msgs.msg import Imu
 from nav_msgs.msg import Odometry
 from std_msgs.msg import Header
-from validation_suite.msg import TelemetryImu
+from validation_suite.msg import TelemetryImu, TelemetryOdometry
 
 class TelemetryCollector(Node):
 
@@ -24,8 +24,8 @@ class TelemetryCollector(Node):
     def __init__(self):
         super().__init__("telemetry_imu_node")
         qos = QoSProfile(depth=10, reliability=ReliabilityPolicy.RELIABLE)
-        self.imu_timestamps = deque(maxlen=25)
-        self.odometry_timestamps = deque(maxlen=25)
+        self.imu_timestamps = deque(maxlen=10)
+        self.odometry_timestamps = deque(maxlen=10)
         self.pub = self.create_publisher(msg_type=TelemetryImu, topic="/telemetry_imu", qos_profile=qos)
         self.pub = self.create_publisher(msg_type=TelemetryOdometry, topic="/telemetry_odometry", qos_profile=qos)
         self.sub = self.create_subscription(msg_type=Imu, topic="/imu_data", callback=self.imu_callback, qos_profile=qos)
@@ -69,6 +69,29 @@ class TelemetryCollector(Node):
 
         self.pub.publish(msg=telemetry_msg)
 
+    def odometry_callback(self, msg):
+        """
+        Receive Odometry message from topic '/odometry_data' and then
+        extract/ calculate fields for TelemetryOdometryMsg
+
+        Args: msg - The given Odometry message
+
+        """
+        odometry_msg = TelemetryOdometry()
+
+        pose_x = msg.pose.pose.position.x
+        pose_y = msg.pose.pose.position.y
+        pose_z = msg.pose.pose.position.z
+
+        orientation_x = msg.pose.pose.orientation.x
+        orientation_y = msg.pose.pose.orientation.y
+        orientation_z = msg.pose.pose.orientation.z
+
+        odometry_msg.msg_age_ms = (self.get_clock().now() - Time.from_msg(msg.header.stamp)).nanoseconds / 1e6
+        odometry_msg.message_rate_hz = self.calculate_freq(self.odometry_timestamps)
+
+        position_result = self.validate_odometry_position(postiion=msg.pose.pose.position)
+
     def calculate_freq(self, timestamps):
         freq = 0.0
         current = self.get_clock().now()
@@ -84,6 +107,21 @@ class TelemetryCollector(Node):
         else:
             freq = 0.0
         return freq
+
+    def validate_odometry_position(self, position):
+        """
+        Validates a given odometry position
+
+        Args: position (geometry_msgs/msg/PoseWithCovariance): The given odometry position
+
+        Returns: 
+            string representing the worst status (ok/warn/poor) of the IMU orientation properties
+        """
+        position_x = position.x
+        position_y = position.y
+        position_z = position.z
+
+        return self.get_worst_status(value_tuple=(position_x, position_y, position_z), component="point", keys=("x", "y", "z"), attribute_type="odo_pose")
 
     def validate_imu_orientation(self, orientation):
         """Validates a given IMU oritentation
@@ -108,7 +146,7 @@ class TelemetryCollector(Node):
         pitch_deg = math.degrees(pitch_rads)
         yaw_deg = math.degrees(yaw_rads)
 
-        return self.get_worst_status(value_tuple=(roll_deg, pitch_deg,yaw_deg), component="orientation", keys=("roll", "pitch", "yaw"))
+        return self.get_worst_status(value_tuple=(roll_deg, pitch_deg,yaw_deg), component="orientation", keys=("roll", "pitch", "yaw"), attribute_type="imu")
 
     def validate_imu_angular_velocity(self, angular_velocity):
         """Validates a given IMU angular velocity
@@ -119,7 +157,7 @@ class TelemetryCollector(Node):
         x = angular_velocity.x
         y = angular_velocity.y
         z = angular_velocity.z
-        return self.get_worst_status(value_tuple=(x,y,z), component="angular_velocity", keys=("x", "y", "z"))
+        return self.get_worst_status(value_tuple=(x,y,z), component="angular_velocity", keys=("x", "y", "z"), attribute_type="imu")
 
     def validate_imu_linear_acceleration(self, linear_acceleration):
         """Validates a given IMU linear acceleration
@@ -131,9 +169,9 @@ class TelemetryCollector(Node):
         x = linear_acceleration.x
         y = linear_acceleration.y
         z = linear_acceleration.z
-        return self.get_worst_status(value_tuple=(x,y,z), component="linear_acceleration", keys=("x", "y", "z"))
+        return self.get_worst_status(value_tuple=(x,y,z), component="linear_acceleration", keys=("x", "y", "z"), attribute_type="imu")
 
-    def get_worst_status(self, value_tuple, component, keys):
+    def get_worst_status(self, value_tuple, component, keys, attribute_type):
         """Given 3 values (oritentation x/y/z, angular_velocity x/y/z, linear acclearation x/y/z),
         classify each value and return the most severe status message
 
@@ -141,27 +179,39 @@ class TelemetryCollector(Node):
             value_tuple (tuple): A tuple containing all 3 values for a component (x/y/z)
             component (str): The component that x/y/z are associated with (orientation, angular_velocity, linear acceleration)
             keys (tuple): The tuple layout names of the corresponding component ("roll", "pitch", "yaw") / ("x", "y", "z")
+            attribute_type (str): type of field to validation IMU, odo_pose, odo_orientation
         """
         severity = {"GOOD": 0, "WARN": 1, "POOR": 2}
         worst = "GOOD"
 
         # example zip() => [("roll": xxx), ("pitch": xxx), ("yaw": xxx)]
         for key, value in zip((keys), value_tuple):
-            res = self.classify_value(value, component, key)   
+            res = self.classify_value(value=value, component=component, key=key, attribute_type=attribute_type)   
             if severity[res] > severity[worst]:
                 worst = res
         return worst
 
-    def classify_value(self, value, component, key):
+    def classify_value(self, value, component, key, attribute_type):
         """Given a value from a component, determine it's status (good/warn/poor)
 
         Args:
             value (num): The given value from the component
             component (str): The given component of the IMU
             key (str): The specific field name to look up in IMU_RANGES (e.g. "roll", "x"
+            attribute_type (str): type of field to validation IMU, odo_pose, odo_orientation
         """
-        good_min, good_max = config.IMU_RANGES[component]["good"][key]
-        warn_min, warn_max = config.IMU_RANGES[component]["warn"][key]
+        good_min, good_max = 0, 0
+        warn_min, warn_max = 0, 0
+
+        if attribute_type == "imu":
+            good_min, good_max = config.IMU_RANGES[component]["good"][key]
+            warn_min, warn_max = config.IMU_RANGES[component]["warn"][key]  
+        elif attribute_type == "odo_pose":
+            good_min, good_max = config.POSE_WITH_COVARIANCE_RANGES[component]["good"][key]
+            warn_min, warn_max = config.POSE_WITH_COVARIANCE_RANGES[component]["warn"][key]  
+        else:
+            good_min, good_max = config.TWIST_WITH_COVARIANCE_RANGES[component]["good"][key]
+            warn_min, warn_max = config.TWIST_WITH_COVARIANCE_RANGES[component]["warn"][key] 
 
         if good_min <= value <= good_max:
             return "GOOD"
