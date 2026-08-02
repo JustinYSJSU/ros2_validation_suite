@@ -31,8 +31,8 @@ class PromExporter(Node):
         self.telemetry_imu_freq = Gauge('telemetry_imu_freq', 'Imu msg freq')
 
         self.telemetry_imu_angular_velocity_x = Gauge('telemetry_imu_angular_velocity_x', 'msg angular velocity x')
-        self.telemetry_imu_angular_velocity_y = Gauge('telemetry_imu_angular_velocity_x', 'msg angular velocity y')
-        self.telemetry_imu_angular_velocity_z = Gauge('telemetry_imu_angular_velocity_x', 'msg angular velocity z')
+        self.telemetry_imu_angular_velocity_y = Gauge('telemetry_imu_angular_velocity_y', 'msg angular velocity y')
+        self.telemetry_imu_angular_velocity_z = Gauge('telemetry_imu_angular_velocity_z', 'msg angular velocity z')
 
         self.telemetry_imu_linear_acceleration_x = Gauge('telemetry_imu_linear_acceleration_x', 'msg linear accelearation x')
         self.telemetry_imu_linear_acceleration_y = Gauge('telemetry_imu_linear_acceleration_y', 'msg linear accelearation y')
