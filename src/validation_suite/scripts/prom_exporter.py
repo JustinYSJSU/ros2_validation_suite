@@ -159,9 +159,9 @@ class PromExporter(Node):
         self.telemetry_odometry_pose_y.set(msg.odometry_pose_y)
         self.telemetry_odometry_pose_z.set(msg.odometry_pose_z)
 
-        self.telemetry_odoemetry_orientation_x.set(msg.odometry_orientation_x)
-        self.telemetry_odoemetry_orientation_y.set(msg.odometry_orientation_y)
-        self.telemetry_odoemetry_orientation_z.set(msg.odometry_orientation_z)
+        self.telemetry_odemetry_orientation_x.set(msg.odometry_orientation_x)
+        self.telemetry_odemetry_orientation_y.set(msg.odometry_orientation_y)
+        self.telemetry_odemetry_orientation_z.set(msg.odometry_orientation_z)
 
         if msg.status == 'GOOD':
             self.telemetry_odometry_current_status.set(1)
