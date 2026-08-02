@@ -13,17 +13,27 @@ from diagnostic_msgs.msg import DiagnosticStatus
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import TwistWithCovariance, PoseWithCovariance, Pose, Point, Quaternion, Vector3, Twist
 from prometheus_client import start_http_server, Gauge, Counter
+from validation_suite.msg import TelemetryImu, TelemetryOdometry
 
 class PromExporter(Node):
     def __init__(self):
         super().__init__("prom_exporter")
         qos = QoSProfile(depth=10, reliability=ReliabilityPolicy.RELIABLE)
-        self.create_subscription(Imu, "imu_data", self.callback, qos)
-        self.create_subscription(Odometry, "odometry_data", self.odometry_callback, qos)
-        self.create_subscription(BatteryState, "battery_data", self.battery_callback, qos)
+        self.create_subscription(msg_type=Imu, topic="imu_data", callback=self.callback, qos_profile=qos)
+        self.create_subscription(msg_type=Odometry, topic="odometry_data", callback=self.odometry_callback, qos_profile=qos)
+        self.create_subscription(msg_type=BatteryState, topic="battery_data", callback=self.battery_callback, qos_profile=qos)
+        self.create_subscription(msg_type=TelemetryImu, topic="telemetry_imu")
 
-        self.statues = Counter('sensor_status_total', 'Counter for each status',
+        self.telemetry_imu_status_count = Counter('imu_status_total', 'Counter for each status',
         ['status'])
+        self.telemetry_imu_current_status = Gauge('telemetry_imu_current_status','Current msg status')
+        self.telemetry_imu_freq = Gauge('telemetry_imu_freq', 'Imu msg freq')
+        
+        self.telemetry_odometry_status_count = Counter('odometry_status_total', 'Counter for each status',
+        ['status'])
+        self.telemetry_odometry_current_status = Gauge('telemetry_odometry_current_status','Current msg status')
+        self.telemetry_odometry_freq = Gauge('telemetry_odometry_freq', 'Odometry msg freq')
+
         self.orientation_x = Gauge('imu_orientation_x', 'IMU orientation x')
         self.orientation_y = Gauge('imu_orientation_y', 'IMU orientation y')
         self.orientation_z = Gauge('imu_orientation_z', 'IMU orientation z')
@@ -91,6 +101,38 @@ class PromExporter(Node):
         self.battery_percentage.set(msg.percentage)
         self.battery_voltage.set(msg.voltage)
         
+    def telemetry_imu_callback(self, msg):
+        """Set PromExporter node values to received metrics from topic msg
+
+        Args: msg (TelemetryImu): The given TelemetryImu message
+        """
+        if msg.status == 'GOOD':
+            self.telemetry_imu_current_status.set(1)
+            self.telemetry_imu_status_count.labels(status="GOOD").inc()
+        elif msg.status == 'WARN':
+            self.telemetry_imu_current_status.set(2)
+            self.telemetry_imu_status_count.labels(status="WARN").inc()
+        else:
+            self.telemetry_imu_current_status.set(3)
+            self.telemetry_imu_status_count.labels(status="POOR").inc()
+        self.telemetry_imu_freq.set(msg.message_rate_hz)
+    
+    def telemetry_odometry_callback(self, msg):
+        """Set PromExporter node values to received metrics from topic msg
+
+        Args: msg (TelemetryImu): The given TelemetryImu message
+        """
+        if msg.status == 'GOOD':
+            self.telemetry_odometry_current_status.set(1)
+            self.telemetry_odometry_status_count.labels(status="GOOD").inc()
+        elif msg.status == 'WARN':
+            self.telemetry_odometry_current_status.set(2)
+            self.telemetry_odometry_status_count.labels(status="WARN").inc()
+        else:
+            self.telemetry_odometry_current_status.set(3)
+            self.telemetry_odometry_status_count.labels(status="POOR").inc()
+        self.telemetry_odometry_freq.set(msg.message_rate_hz)
+
 def main():
     rclpy.init()
     start_http_server(8000)
