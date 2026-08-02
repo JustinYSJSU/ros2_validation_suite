@@ -32,7 +32,7 @@ class OdometryPublisher(Node):
     def __init__(self):
         super().__init__("odometry_publisher_node")
         self.pub = self.create_publisher(Odometry, "odometry_data", 10)
-        self.time = self.create_timer(5, self.generate_odometry_data)
+        self.time = self.create_timer(0.5, self.generate_odometry_data)
 
         self.pose_property_dict = {
                 1: "position",

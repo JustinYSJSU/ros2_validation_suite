@@ -28,7 +28,7 @@ class SensorDataPublisher(Node):
     def __init__(self):
         super().__init__("imu_publisher_node")
         self.pub = self.create_publisher(Imu, "imu_data", 10)
-        self.time = self.create_timer(5, self.generate_imu_data)
+        self.time = self.create_timer(0.5, self.generate_imu_data)
         self.imu_property_dict = {
             1: "orientation",
             2: "angular_velocity",
