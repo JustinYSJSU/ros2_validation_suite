@@ -78,13 +78,13 @@ class TelemetryCollector(Node):
         """
         odometry_msg = TelemetryOdometry()
 
-        odometry_pose_x = msg.pose.pose.position.x
-        odometry_pose_y = msg.pose.pose.position.y
-        odometry_pose_z = msg.pose.pose.position.z
+        odometry_msg.odometry_pose_x = msg.pose.pose.position.x
+        odometry_msg.odometry_pose_y = msg.pose.pose.position.y
+        odometry_msg.odometry_pose_z = msg.pose.pose.position.z
 
-        odometry_orientation_x = msg.pose.pose.orientation.x
-        odometry_orientation_y = msg.pose.pose.orientation.y
-        odometry_orientation_z = msg.pose.pose.orientation.z
+        odometry_msg.odometry_orientation_x = msg.pose.pose.orientation.x
+        odometry_msg.odometry_orientation_y = msg.pose.pose.orientation.y
+        odometry_msg.odometry_orientation_z = msg.pose.pose.orientation.z
 
         odometry_msg.msg_age_ms = (self.get_clock().now() - Time.from_msg(msg.header.stamp)).nanoseconds / 1e6
         odometry_msg.message_rate_hz = self.calculate_freq(self.odometry_timestamps)
