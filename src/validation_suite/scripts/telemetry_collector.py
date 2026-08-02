@@ -26,10 +26,10 @@ class TelemetryCollector(Node):
         qos = QoSProfile(depth=10, reliability=ReliabilityPolicy.RELIABLE)
         self.imu_timestamps = deque(maxlen=10)
         self.odometry_timestamps = deque(maxlen=10)
-        self.pub = self.create_publisher(msg_type=TelemetryImu, topic="/telemetry_imu", qos_profile=qos)
-        self.pub = self.create_publisher(msg_type=TelemetryOdometry, topic="/telemetry_odometry", qos_profile=qos)
-        self.sub = self.create_subscription(msg_type=Imu, topic="/imu_data", callback=self.imu_callback, qos_profile=qos)
-        self.sub = self.create_subscription(msg_type=Odometry, topic="/odometry_data", callback=self.odometry_callback, qos_profile=qos)
+        self.imu_pub = self.create_publisher(msg_type=TelemetryImu, topic="/telemetry_imu", qos_profile=qos)
+        self.odo_pub = self.create_publisher(msg_type=TelemetryOdometry, topic="/telemetry_odometry", qos_profile=qos)
+        self.imu_sub = self.create_subscription(msg_type=Imu, topic="/imu_data", callback=self.imu_callback, qos_profile=qos)
+        self.odo_sub = self.create_subscription(msg_type=Odometry, topic="/odometry_data", callback=self.odometry_callback, qos_profile=qos)
     
     def imu_callback(self, msg):
         """
@@ -64,10 +64,9 @@ class TelemetryCollector(Node):
         orientation_result = self.validate_imu_orientation(orientation=orientation)
         angular_velocity_result = self.validate_imu_angular_velocity(angular_velocity=angular_velocity)
         linear_acceleration_result = self.validate_imu_linear_acceleration(linear_acceleration=linear_acceleration)
-        telemetry_msg.status = self.overall_status(orientation_status=orientation_result, angular_velocity_status=angular_velocity_result,
-        linear_acceleration_status=linear_acceleration_result)
+        telemetry_msg.status = self.overall_status(status_list=[orientation_result, linear_acceleration_result, angular_velocity_result])
 
-        self.pub.publish(msg=telemetry_msg)
+        self.imu_pub.publish(msg=telemetry_msg)
 
     def odometry_callback(self, msg):
         """
@@ -79,25 +78,30 @@ class TelemetryCollector(Node):
         """
         odometry_msg = TelemetryOdometry()
 
-        pose_x = msg.pose.pose.position.x
-        pose_y = msg.pose.pose.position.y
-        pose_z = msg.pose.pose.position.z
+        odometry_pose_x = msg.pose.pose.position.x
+        odometry_pose_y = msg.pose.pose.position.y
+        odometry_pose_z = msg.pose.pose.position.z
 
-        orientation_x = msg.pose.pose.orientation.x
-        orientation_y = msg.pose.pose.orientation.y
-        orientation_z = msg.pose.pose.orientation.z
+        odometry_orientation_x = msg.pose.pose.orientation.x
+        odometry_orientation_y = msg.pose.pose.orientation.y
+        odometry_orientation_z = msg.pose.pose.orientation.z
 
         odometry_msg.msg_age_ms = (self.get_clock().now() - Time.from_msg(msg.header.stamp)).nanoseconds / 1e6
         odometry_msg.message_rate_hz = self.calculate_freq(self.odometry_timestamps)
 
-        position_result = self.validate_odometry_position(postiion=msg.pose.pose.position)
+        position_result = self.validate_odometry_position(position=msg.pose.pose.position)
+        orientation_result = self.validate_odometry_orientation(orientation=msg.pose.pose.orientation)
+
+        odometry_msg.status = self.overall_status(status_list=[position_result, orientation_result])
+
+        self.odo_pub.publish(msg=odometry_msg)
 
     def calculate_freq(self, timestamps):
         freq = 0.0
         current = self.get_clock().now()
         timestamps.append(current.nanoseconds)
 
-        if len(self.timestamps) >= self.TIMESTAMPS_MIN_LEN:
+        if len(timestamps) >= self.TIMESTAMPS_MIN_LEN:
             elapsed = (timestamps[-1] - timestamps[0]) / 1e9
 
             if elapsed > 0:
@@ -137,7 +141,7 @@ class TelemetryCollector(Node):
         orientation_z = orientation.z
         orientation_w = orientation.w
 
-        return self.get_worst_status(value_tuple=(position_x, position_y, position_z), component="orientation", keys=("x", "y", "z", "w"), attribute_type="odo_orientation")
+        return self.get_worst_status(value_tuple=(orientation_x, orientation_y, orientation_z, orientation_w), component="orientation", keys=("x", "y", "z", "w"), attribute_type="odo_orientation")
 
     def validate_imu_orientation(self, orientation):
         """Validates a given IMU oritentation
@@ -233,14 +237,12 @@ class TelemetryCollector(Node):
         else:
             return "POOR"
 
-    def overall_status(self, orientation_status, angular_velocity_status, linear_acceleration_status):
+    def overall_status(self, status_list):
         """Given status strings from orientation, angular velocity, and linear accelearation, take
         the worst one to determine overall msg status
 
         Args:
-            orientation_status (str): Determined orientation status
-            angular_velocity_status (str): Determined angular velocity status
-            linear_acceleration_status (str): Determined linear acceleration status
+            status_list (list): A list of a statues from all components
         
         Returns:
         """
@@ -249,7 +251,7 @@ class TelemetryCollector(Node):
             "WARN": 2, 
             "POOR": 3
         }
-        max_status = max(status_to_value[orientation_status], status_to_value[angular_velocity_status], status_to_value[linear_acceleration_status])
+        max_status = max(status_to_value[status] for status in status_list)
 
         flipped = {value: key for key, value in status_to_value.items()}
 
@@ -257,7 +259,7 @@ class TelemetryCollector(Node):
 
 def main():
     rclpy.init() # initialize ros2 communication
-    my_pub = TelemetryImuCollector()
+    my_pub = TelemetryCollector()
     print("Publishing")
 
     try:
