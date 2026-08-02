@@ -22,7 +22,8 @@ class PromExporter(Node):
         self.create_subscription(msg_type=Imu, topic="imu_data", callback=self.callback, qos_profile=qos)
         self.create_subscription(msg_type=Odometry, topic="odometry_data", callback=self.odometry_callback, qos_profile=qos)
         self.create_subscription(msg_type=BatteryState, topic="battery_data", callback=self.battery_callback, qos_profile=qos)
-        self.create_subscription(msg_type=TelemetryImu, topic="telemetry_imu")
+        self.create_subscription(msg_type=TelemetryImu, topic="telemetry_imu", callback=self.telemetry_imu_callback, qos_profile=qos)
+        self.create_subscription(msg_type=TelemetryOdometry, topic="telemetry_odometry", callback=self.telemetry_odometry_callback, qos_profile=qos)
 
         self.telemetry_imu_status_count = Counter('imu_status_total', 'Counter for each status',
         ['status'])
