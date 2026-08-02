@@ -29,11 +29,31 @@ class PromExporter(Node):
         ['status'])
         self.telemetry_imu_current_status = Gauge('telemetry_imu_current_status','Current msg status')
         self.telemetry_imu_freq = Gauge('telemetry_imu_freq', 'Imu msg freq')
-        
+
+        self.telemetry_imu_angular_velocity_x = Gauge('telemetry_imu_angular_velocity_x', 'msg angular velocity x')
+        self.telemetry_imu_angular_velocity_y = Gauge('telemetry_imu_angular_velocity_x', 'msg angular velocity y')
+        self.telemetry_imu_angular_velocity_z = Gauge('telemetry_imu_angular_velocity_x', 'msg angular velocity z')
+
+        self.telemetry_imu_linear_acceleration_x = Gauge('telemetry_imu_linear_acceleration_x', 'msg linear accelearation x')
+        self.telemetry_imu_linear_acceleration_y = Gauge('telemetry_imu_linear_acceleration_y', 'msg linear accelearation y')
+        self.telemetry_imu_linear_acceleration_z = Gauge('telemetry_imu_linear_acceleration_z', 'msg linear accelearation z')
+
+        self.telemetry_imu_orientation_x = Gauge('telemetry_imu_orientation_x', 'msg orientation x')
+        self.telemetry_imu_orientation_y = Gauge('telemetry_imu_orientation_y', 'msg orientation y')
+        self.telemetry_imu_orientation_z = Gauge('telemetry_imu_orientation_z', 'msg orientation z')
+
         self.telemetry_odometry_status_count = Counter('odometry_status_total', 'Counter for each status',
         ['status'])
         self.telemetry_odometry_current_status = Gauge('telemetry_odometry_current_status','Current msg status')
         self.telemetry_odometry_freq = Gauge('telemetry_odometry_freq', 'Odometry msg freq')
+
+        self.telemetry_odometry_pose_x = Gauge('telemetry_odometry_pose_x', 'msg pose x')
+        self.telemetry_odometry_pose_y = Gauge('telemetry_odometry_pose_y', 'msg pose y')
+        self.telemetry_odometry_pose_z = Gauge('telemetry_odometry_pose_z', 'msg pose z')
+
+        self.telemetry_odometry_orientation_x = Gauge('telemetry_odometry_orientation_x', 'msg orientation x')
+        self.telemetry_odometry_orientation_y = Gauge('telemetry_odometry_orientation_y', 'msg orientation y')
+        self.telemetry_odometry_orientation_z = Gauge('telemetry_odometry_orientation_z', 'msg orientation z')
 
         self.orientation_x = Gauge('imu_orientation_x', 'IMU orientation x')
         self.orientation_y = Gauge('imu_orientation_y', 'IMU orientation y')
@@ -107,6 +127,18 @@ class PromExporter(Node):
 
         Args: msg (TelemetryImu): The given TelemetryImu message
         """
+        self.telemetry_imu_angular_velocity_x.set(msg.angular_velocity_x)
+        self.telemetry_imu_angular_velocity_y.set(msg.angular_velocity_y)
+        self.telemetry_imu_angular_velocity_z.set(msg.angular_velocity_z)
+
+        self.telemetry_imu_linear_acceleration_x.set(msg.linear_acceleration_x)
+        self.telemetry_imu_linear_acceleration_y.set(msg.linear_acceleration_y)
+        self.telemetry_imu_linear_acceleration_z.set(msg.linear_acceleration_z)
+
+        self.telemetry_imu_orientation_x.set(msg.orientation_x)
+        self.telemetry_imu_orientation_x.set(msg.orientation_y)
+        self.telemetry_imu_orientation_x.set(msg.orientation_z)
+
         if msg.status == 'GOOD':
             self.telemetry_imu_current_status.set(1)
             self.telemetry_imu_status_count.labels(status="GOOD").inc()
@@ -121,8 +153,16 @@ class PromExporter(Node):
     def telemetry_odometry_callback(self, msg):
         """Set PromExporter node values to received metrics from topic msg
 
-        Args: msg (TelemetryImu): The given TelemetryImu message
+        Args: msg (TelemetryOdometry): The given TelemetryOdometry message
         """
+        self.telemetry_odometry_pose_x.set(msg.odometry_pose_x)
+        self.telemetry_odometry_pose_y.set(msg.odometry_pose_y)
+        self.telemetry_odometry_pose_z.set(msg.odometry_pose_z)
+
+        self.telemetry_odoemetry_orientation_x.set(msg.odometry_orientation_x)
+        self.telemetry_odoemetry_orientation_y.set(msg.odometry_orientation_y)
+        self.telemetry_odoemetry_orientation_z.set(msg.odometry_orientation_z)
+
         if msg.status == 'GOOD':
             self.telemetry_odometry_current_status.set(1)
             self.telemetry_odometry_status_count.labels(status="GOOD").inc()
@@ -139,7 +179,6 @@ def main():
     start_http_server(8000)
     node = PromExporter()
     rclpy.spin(node)
-
 
 if __name__ == '__main__':
     main()
