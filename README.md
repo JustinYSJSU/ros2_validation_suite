@@ -4,6 +4,8 @@
 
 **[Link to CI & QA Test Suite Dashboard](https://quirkywisteria3067.grafana.net/public-dashboards/e93bbf96b5fc46ef8d552fda9c8f8b34)**
 
+**[Link to Telemetry Analysis Dashboard](https://quirkywisteria3067.grafana.net/public-dashboards/f9e1593175e942078ba2241f63c8d6e5)**
+
 ## Objective
 A project made up of 3 components:
 - A simulated ROS 2 System that continously publishes metrics for IMU, Odometry, and BatteryState data
