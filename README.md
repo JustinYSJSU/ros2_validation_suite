@@ -5,10 +5,11 @@
 **[Link to CI & QA Test Suite Dashboard](https://quirkywisteria3067.grafana.net/public-dashboards/e93bbf96b5fc46ef8d552fda9c8f8b34)**
 
 ## Objective
-A combination of two main projects:
+A project made up of 3 components:
 - A simulated ROS 2 System that continously publishes metrics for IMU, Odometry, and BatteryState data
 - An automated QA test suite to validate node availability, topic messages, and publisher/subscriber connectivity
-  
+- A telemetry analysis system to validate node health and latest node metrics
+
 ## Architecture
 - On the Linux VM system, ROS 2 & Prometheus nodes are kept continuously running via `systemd service .service files`
 <img width="1226" height="709" alt="image" src="https://github.com/user-attachments/assets/0608cbab-21ec-4704-bf78-15f88362b598" />
@@ -35,3 +36,10 @@ A combination of two main projects:
 <img width="1499" height="328" alt="Screenshot 2026-07-22 121513" src="https://github.com/user-attachments/assets/8da75a38-c6f2-489e-a6eb-c97917ec60ad" />
 
 ----------------------
+
+**Telemetry Analysis**
+
+----------------------
+<img width="1511" height="286" alt="Screenshot 2026-08-02 224050" src="https://github.com/user-attachments/assets/458e84c6-f4b9-4028-919d-835862e26f0b" />
+<img width="1523" height="696" alt="Screenshot 2026-08-02 230158" src="https://github.com/user-attachments/assets/11574b33-aefe-446b-949a-ee7897bfccc6" />
+
