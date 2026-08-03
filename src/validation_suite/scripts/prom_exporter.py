@@ -136,8 +136,8 @@ class PromExporter(Node):
         self.telemetry_imu_linear_acceleration_z.set(msg.linear_acceleration_z)
 
         self.telemetry_imu_orientation_x.set(msg.orientation_x)
-        self.telemetry_imu_orientation_x.set(msg.orientation_y)
-        self.telemetry_imu_orientation_x.set(msg.orientation_z)
+        self.telemetry_imu_orientation_y.set(msg.orientation_y)
+        self.telemetry_imu_orientation_z.set(msg.orientation_z)
 
         if msg.status == 'GOOD':
             self.telemetry_imu_current_status.set(1)
